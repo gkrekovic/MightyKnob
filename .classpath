@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="com/vinsp/main/Population.java|com/vinsp/main/AudioFeatureExtractor.java|org/gkrekovic/vinsp/AudioFeatureExtractor.java|org/gkrekovic/vinsp/Population.java" kind="src" path="src"/>
+	<classpathentry exported="true" kind="lib" path="lib/jtransforms-2.4.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/JVstHost.jar">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="MightyKnob/lib"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry exported="true" kind="lib" path="lib/uncommons-maths-1.2.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/watchmaker-framework-0.7.1.jar"/>
+	<classpathentry kind="lib" path="lib/jFuzzyLogic_v3.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
