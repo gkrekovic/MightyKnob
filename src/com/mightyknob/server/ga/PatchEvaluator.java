@@ -14,10 +14,13 @@ import com.synthbot.audioplugin.vst.vst2.JVstHost2;
 
 public class PatchEvaluator implements FitnessEvaluator<Patch> {
 
+	final static double MAX_DISTANCE = 20000.0;
 	private JVstHost2 vst;
+	ArrayList<Double> targetVector;
 	
-	public PatchEvaluator(JVstHost2 vst) {
+	public PatchEvaluator(JVstHost2 vst, ArrayList<Double> targetVector) {
 		this.vst = vst;
+		this.targetVector = targetVector;
 	}
 	
 	@Override
@@ -39,19 +42,24 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 		}
 			
 		FeatureExtraction Extractor = new FeatureExtraction(blockSize, stepSize, sampleRate);
-		float centroid;
+		double centroid;
 		centroid = Extractor.extractFeatures(signal);
-		/* System.out.println("Centroid: " + centroid);
 		
-		if (Float.isNaN(centroid)) {
-			for (float p : parameters) {
-				System.out.println(p);
-			}			
-		} */
+		ArrayList<Double> candidateVector = new ArrayList<Double>();
+		candidateVector.add(centroid);
 		
-		return Math.abs(4800-centroid);
+		return distance(candidateVector);
 	}
 
+	private double distance(ArrayList<Double> candidateVector)  {
+		if (candidateVector.size() != targetVector.size()) return MAX_DISTANCE;
+		double d = 0;
+		for (int i = 0; i < candidateVector.size(); ++i) {
+			d += Math.abs(candidateVector.get(i) - targetVector.get(i));
+		}
+		return d;
+	}
+	
 	@Override
 	public boolean isNatural() {
 		return false;

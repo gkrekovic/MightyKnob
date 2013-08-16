@@ -1,6 +1,7 @@
 package com.mightyknob.server.ga;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
@@ -29,18 +30,21 @@ public class GeneticAlgorithm {
 		eliteCount = Integer.parseInt(properties.getProperty("elite_count", "5"));		
 	}
 	
-	public void evolvePatch() {
-		PatchFactory factory = new PatchFactory(vst.numParameters());
+	public void evolvePatch(ArrayList<Double> targetVector) {
+		PatchFactory factory = new PatchFactory(vst);
+		Collection<Patch> seedCandidates = new ArrayList<Patch>();
+		seedCandidates = factory.generateSeedCandidates();
+		
 		List<EvolutionaryOperator<Patch>> operators = new ArrayList<EvolutionaryOperator<Patch>>(2);
 		operators.add(new PatchMutation(mutationProbability, maxMutation));
 		operators.add(new PatchCrossover());
 		EvolutionaryOperator<Patch> pipeline = new EvolutionPipeline<Patch>(operators);
 		
 		EvolutionEngine<Patch> engine = new GenerationalEvolutionEngine<Patch>(factory,
-				pipeline, new PatchEvaluator(vst), new RouletteWheelSelection(), new MersenneTwisterRNG());
+				pipeline, new PatchEvaluator(vst, targetVector), new RouletteWheelSelection(), new MersenneTwisterRNG());
 		
 		Patch p = new Patch();		
-		p = engine.evolve(populationSize, eliteCount, new Stagnation(5, false));
+		p = engine.evolve(populationSize, eliteCount, seedCandidates, new Stagnation(5, false));
 		Synth synth = new Synth(vst);
 		synth.preview(p);
 		

@@ -1,0 +1,35 @@
+FUNCTION_BLOCK attributesToFeatures
+
+VAR_INPUT
+	brightness : REAL;
+END_VAR
+
+VAR_OUTPUT
+	centroid_mean : REAL;
+END_VAR
+
+FUZZIFY brightness
+	TERM low := (0, 1) (0.5, 0);
+	TERM medium := (0.25, 0) (0.5, 1) (0.75, 0);
+	TERM high := (0.5, 0) (1, 1);
+END_FUZZIFY
+
+DEFUZZIFY centroid_mean
+	TERM low := (100, 1) (1000, 0);
+	TERM medium := (500, 0) (1000, 1) (10000, 0);
+	TERM high := (1000, 0) (10000, 1);
+	METHOD: COG;
+	DEFAULT := 1000;
+END_DEFUZZIFY
+
+RULEBLOCK rules
+	AND : MIN;
+	ACCU : MAX;
+	ACT : MIN;
+	
+	RULE 1: IF brightness IS low THEN centroid_mean IS low;
+ 	RULE 2: IF brightness IS medium THEN centroid_mean IS medium;
+	RULE 3: IF brightness IS high THEN centroid_mean IS high;
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK

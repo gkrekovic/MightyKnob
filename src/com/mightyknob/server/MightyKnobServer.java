@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import com.mightyknob.server.ga.GeneticAlgorithm;
@@ -27,16 +28,20 @@ public class MightyKnobServer {
 		
 		initVst(properties);
 		
-		GeneticAlgorithm ga = new GeneticAlgorithm(properties, vst);
-		// ExpertSystem es = new ExpertSystem(properties);
-		// runAlgorithm(ga, es);
-		ga.evolvePatch();
+		try {
+			GeneticAlgorithm ga = new GeneticAlgorithm(properties, vst);
+			ExpertSystem es = new ExpertSystem(properties);
+			runAlgorithm(ga, es);
+		} catch (Exception e) {
+			System.err.println(e);
+		}
 	}
 	
-    /*
 	private static void runAlgorithm(GeneticAlgorithm ga, ExpertSystem es) {
-		
-	} */
+		ArrayList<Double> targetVector = new ArrayList<Double>();
+		targetVector = es.evaluate();
+		ga.evolvePatch(targetVector);
+	}
 	
     private static void initVst(Properties properties) {
     	JVstAudioThread audioThread;
