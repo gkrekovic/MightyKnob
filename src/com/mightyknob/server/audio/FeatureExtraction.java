@@ -21,9 +21,11 @@ public class FeatureExtraction {
 		int numberOfBlocks = (signal.length-blockSize)/stepSize+1;
 		float[][] spectrum = new float[numberOfBlocks][blockSize/2];
 		float[] centroid = new float[numberOfBlocks];
-
+		float[] flux = new float[numberOfBlocks];
+		
 		spectrum = powerSpectrum(signal);
 		centroid = spectralCentroid(spectrum);
+		flux = spectralFlux(spectrum);
 		
 		return calcMean(centroid);
 	}
@@ -72,9 +74,26 @@ public class FeatureExtraction {
 			} else {
 				centroid[i] = 0;
 			}
-			// System.out.println(centroid[i]);
 		}
 		return centroid;
+	}
+	
+	private float[] spectralFlux(float spectrum[][]) {
+		int numberOfBlocks = spectrum.length;
+		float[] flux = new float [numberOfBlocks];
+		flux[0] = 0;
+		
+		for (int i=1; i<numberOfBlocks; ++i) {
+			float sum = 0;
+			for (int j=0; j<blockSize/2; ++j) {
+				float difference;
+				difference = spectrum[i][j] - spectrum[i-1][j];
+				sum += (difference*difference);
+			}
+			flux[i] = sum;
+		}
+		
+		return flux;
 	}
 	
 	private float calcMean(float[] array) {
