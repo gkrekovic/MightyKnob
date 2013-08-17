@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 import com.mightyknob.server.ga.GeneticAlgorithm;
+import com.mightyknob.server.tools.PresetAnalyzer;
 import com.synthbot.audioio.vst.JVstAudioThread;
 import com.synthbot.audioplugin.vst.JVstLoadException;
 import com.synthbot.audioplugin.vst.vst2.JVstHost2;
@@ -28,13 +29,17 @@ public class MightyKnobServer {
 		
 		initVst(properties);
 		
+		/*
 		try {
 			GeneticAlgorithm ga = new GeneticAlgorithm(properties, vst);
 			ExpertSystem es = new ExpertSystem(properties);
 			runAlgorithm(ga, es);
 		} catch (Exception e) {
 			System.err.println(e);
-		}
+		} */
+		
+		PresetAnalyzer analyzer = new PresetAnalyzer(vst);
+		analyzer.analyzePresets();
 	}
 	
 	private static void runAlgorithm(GeneticAlgorithm ga, ExpertSystem es) {
@@ -71,11 +76,6 @@ public class MightyKnobServer {
 	    
 	    // thread.setPriority(Thread.MAX_PRIORITY);
 	    thread.start();
-	    
-	    int n = vst.numParameters();
-	    for (int i = 1; i < n; ++i) {
-	    	System.out.println(vst.getParameterName(i));
-	    }
     }
 
 }

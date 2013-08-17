@@ -34,11 +34,11 @@ public class FeatureExtraction {
 		ArrayList<Double> result = new ArrayList<Double>();
 		
 		result.add(calcMean(centroid));
-		/* result.add(calcStdDev(centroid));
+		result.add(calcStdDev(centroid));
 		result.add(calcMean(flux));
 		result.add(calcStdDev(flux));
 		result.add(calcMean(flatness));
-		result.add(calcStdDev(flatness)); */
+		result.add(calcStdDev(flatness));
 	
 		return result;
 	}
@@ -115,7 +115,7 @@ public class FeatureExtraction {
 		for (int i=0; i<numberOfBlocks; ++i) {
 			double mean = calcMean(spectrum[i]);
 			double gmean = calcGMean(spectrum[i]);
-			flatness[i] = mean / gmean;
+			flatness[i] = gmean / mean;
 		}
 		return flatness;
 	}
@@ -129,11 +129,11 @@ public class FeatureExtraction {
 	}
 	
 	private double calcGMean(double[] array)  {
-		double product = 1.0;
+		double sum = 0;
 		for (double a : array) {
-			product *= a;
+			sum += Math.log(a);
 		}
-		return Math.pow(product, 1.0/array.length);
+		return Math.exp(sum/array.length);
 	}
 	
 	private double calcVariance(double[] array) {

@@ -80,7 +80,7 @@ public class Synth {
 		return signal;
 	}
 	
-	public void preview(Patch candidate) {
+	public void preview(Patch candidate, String fileName) {
 		int n = 88200;
 		float [] signal = new float[n];
 
@@ -91,12 +91,14 @@ public class Synth {
 			System.err.println("Exception: " + e.getMessage());
 			return;
 		}
-		saveToFile(signal);
-		
+		saveToFile(signal, fileName);	
+	}
+
+	public void preview(Patch candidate) {
+		preview(candidate, "temp.wav");
 	}
 	
-	private void saveToFile(float[] signal) {
-		String fileName = "temp.wav";
+	private void saveToFile(float[] signal, String fileName) {
 		
 		short myFormat = 1;
 		short myChannels = 1;
