@@ -42,13 +42,8 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 		}
 			
 		FeatureExtraction Extractor = new FeatureExtraction(blockSize, stepSize, sampleRate);
-		double centroid;
-		centroid = Extractor.extractFeatures(signal);
-		
-		ArrayList<Double> candidateVector = new ArrayList<Double>();
-		candidateVector.add(centroid);
-		
-		return distance(candidateVector);
+		ArrayList<Double> features = Extractor.extractFeatures(signal);
+		return distance(features);
 	}
 
 	private double distance(ArrayList<Double> candidateVector)  {

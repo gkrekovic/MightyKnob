@@ -22,7 +22,7 @@ public class ExpertSystem {
 	public ArrayList<Double> evaluate() {
 		ArrayList<Double> vector = new ArrayList<Double>();
 		
-		fis.setVariable("brightness", 0.1);
+		fis.setVariable("brightness", 0.8);
 		fis.evaluate();
 		vector.add(fis.getVariable("centroid_mean").getLatestDefuzzifiedValue());
 		System.out.println(fis.getVariable("centroid_mean").getLatestDefuzzifiedValue());

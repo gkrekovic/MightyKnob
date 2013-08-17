@@ -3,6 +3,7 @@ package com.mightyknob.server;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 import javax.sound.midi.ShortMessage;
@@ -79,8 +80,10 @@ public class Test {
 		}
 		
 		FeatureExtraction Extractor = new FeatureExtraction(blockSize, stepSize, sampleRate);
-		float centroid;
-		centroid = Extractor.extractFeatures(signal);
+		
+		ArrayList<Double> features = Extractor.extractFeatures(signal);
+		double centroid;
+		centroid = features.get(0);
 		System.out.println(centroid);
 		
 	}

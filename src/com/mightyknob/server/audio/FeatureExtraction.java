@@ -1,6 +1,8 @@
 package com.mightyknob.server.audio;
 
-import edu.emory.mathcs.jtransforms.fft.FloatFFT_1D;
+import java.util.ArrayList;
+
+import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
 
 
 
@@ -17,26 +19,37 @@ public class FeatureExtraction {
 		
 	}
 	
-	public float extractFeatures(float signal[]) {
+	public ArrayList<Double> extractFeatures(float signal[]) {
 		int numberOfBlocks = (signal.length-blockSize)/stepSize+1;
-		float[][] spectrum = new float[numberOfBlocks][blockSize/2];
-		float[] centroid = new float[numberOfBlocks];
-		float[] flux = new float[numberOfBlocks];
+		double[][] spectrum = new double[numberOfBlocks][blockSize/2];
+		double[] centroid = new double[numberOfBlocks];
+		double[] flux = new double[numberOfBlocks];
+		double[] flatness = new double[numberOfBlocks];
 		
 		spectrum = powerSpectrum(signal);
 		centroid = spectralCentroid(spectrum);
 		flux = spectralFlux(spectrum);
+		flatness = spectralFlatness(spectrum);
 		
-		return calcMean(centroid);
+		ArrayList<Double> result = new ArrayList<Double>();
+		
+		result.add(calcMean(centroid));
+		/* result.add(calcStdDev(centroid));
+		result.add(calcMean(flux));
+		result.add(calcStdDev(flux));
+		result.add(calcMean(flatness));
+		result.add(calcStdDev(flatness)); */
+	
+		return result;
 	}
 	
-	public float[][] powerSpectrum(float signal[]) {
+	public double[][] powerSpectrum(float signal[]) {
 		int numberOfBlocks = (signal.length-blockSize)/stepSize+1;
-		FloatFFT_1D FFTObj = new FloatFFT_1D(blockSize);
-		float[][] spectrum = new float[numberOfBlocks][blockSize/2];
+		DoubleFFT_1D FFTObj = new DoubleFFT_1D(blockSize);
+		double[][] spectrum = new double[numberOfBlocks][blockSize/2];
 		
 		int signalSize = signal.length;
-		float[] block = new float[blockSize];
+		double[] block = new double[blockSize];
 
 		int counter=0;
 		
@@ -55,11 +68,11 @@ public class FeatureExtraction {
 		return spectrum;
 	}
 	
-	public float[] spectralCentroid(float spectrum[][]) {
+	private double[] spectralCentroid(double spectrum[][]) {
 		int numberOfBlocks = spectrum.length;
-		float total = 0;
-		float weightedTotal = 0;
-		float[] centroid = new float[numberOfBlocks];
+		double total = 0;
+		double weightedTotal = 0;
+		double[] centroid = new double[numberOfBlocks];
 		
 		for (int i=0; i<numberOfBlocks; ++i) {
 			total = 0;
@@ -78,15 +91,15 @@ public class FeatureExtraction {
 		return centroid;
 	}
 	
-	private float[] spectralFlux(float spectrum[][]) {
+	private double[] spectralFlux(double spectrum[][]) {
 		int numberOfBlocks = spectrum.length;
-		float[] flux = new float [numberOfBlocks];
-		flux[0] = 0;
+		double[] flux = new double[numberOfBlocks];
+		flux[0] = 0.0;
 		
 		for (int i=1; i<numberOfBlocks; ++i) {
-			float sum = 0;
+			double sum = 0;
 			for (int j=0; j<blockSize/2; ++j) {
-				float difference;
+				double difference;
 				difference = spectrum[i][j] - spectrum[i-1][j];
 				sum += (difference*difference);
 			}
@@ -96,25 +109,43 @@ public class FeatureExtraction {
 		return flux;
 	}
 	
-	private float calcMean(float[] array) {
-		float sum = 0;
-		for (float a : array) {
+	private double[] spectralFlatness(double spectrum[][]) {
+		int numberOfBlocks = spectrum.length;
+		double[] flatness = new double[numberOfBlocks];
+		for (int i=0; i<numberOfBlocks; ++i) {
+			double mean = calcMean(spectrum[i]);
+			double gmean = calcGMean(spectrum[i]);
+			flatness[i] = mean / gmean;
+		}
+		return flatness;
+	}
+	
+	private double calcMean(double[] array) {
+		double sum = 0;
+		for (double a : array) {
 			sum += a;
 		}
 		return sum/array.length;
 	}
 	
+	private double calcGMean(double[] array)  {
+		double product = 1.0;
+		for (double a : array) {
+			product *= a;
+		}
+		return Math.pow(product, 1.0/array.length);
+	}
 	
-	private float calcVariance(float[] array) {
-		float mean = calcMean(array);
-		float temp = 0;
-		for (float a : array) {
+	private double calcVariance(double[] array) {
+		double mean = calcMean(array);
+		double temp = 0;
+		for (double a : array) {
 			temp += (mean-a)*(mean-a);
 		}
 		return temp/array.length;
 	}
 	
-	private float calcStdDev(float[] array) {
-		return (float) Math.sqrt(calcVariance(array));
+	private double calcStdDev(double[] array) {
+		return Math.sqrt(calcVariance(array));
 	}
 }
