@@ -41,6 +41,8 @@ public class Synth {
 		float [] signal = new float[n];
 
 		int numberOfBlocks = n/blockSize;
+		float maxSignal = 0;
+
 		for (int i=0; i<numberOfBlocks; ++i) {
 			
 			for (int j=0; j<blockSize; ++j) {
@@ -53,7 +55,6 @@ public class Synth {
 			vst.processReplacing(signalInput, signalOutput, blockSize);
 		
 			// Stereo to mono
-			float maxSignal = 0;
 			for (int j=0; j<blockSize; ++j) {
 				int k = i*blockSize+j;
 				signal[k] = signalOutput[0][j]+signalOutput[1][j];
@@ -62,12 +63,11 @@ public class Synth {
 				}
 				if (Math.abs(signal[k]) > maxSignal) maxSignal = Math.abs(signal[k]);
 			}
+		}
 
-			// Normalize
-			for (int j=0; j<blockSize; ++j) {
-				int k = i*blockSize+j;
-				signal[k] = signal[k]/maxSignal;
-			}
+		// Normalize
+		for (int i=0; i<signal.length; ++i) {
+			signal[i] = signal[i]/maxSignal;
 		}
 		
 		try {
