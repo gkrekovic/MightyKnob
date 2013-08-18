@@ -19,16 +19,19 @@ public class FeatureExtraction {
 	}
 	
 	public ArrayList<Double> extractFeatures(float signal[]) {
+		int effectiveLength = lastIndexBeforeZeros(signal);
+		
 		int numberOfBlocks = (signal.length-blockSize)/stepSize+1;
-		int effectiveNumberOfBlocks = (lastIndexBeforeZeros(signal)-blockSize)/stepSize+1;
-		System.out.println("noB = " + numberOfBlocks + "  enoB = " + effectiveNumberOfBlocks);
+		int effectiveNumberOfBlocks = (effectiveLength-blockSize)/stepSize+1;
+		
+		// System.out.println("Eln = " + effectiveLength + " Rln = " + signal.length + " ENb = " + effectiveNumberOfBlocks + " RalNumB = " + numberOfBlocks);
 		
 		double[][] spectrum = new double[effectiveNumberOfBlocks][blockSize/2];
 		double[] centroid = new double[effectiveNumberOfBlocks];
 		double[] flux = new double[effectiveNumberOfBlocks];
 		double[] flatness = new double[effectiveNumberOfBlocks];
 		
-		spectrum = powerSpectrum(signal);
+		spectrum = powerSpectrum(signal, effectiveLength);
 		centroid = spectralCentroid(spectrum);
 		flux = spectralFlux(spectrum);
 		flatness = spectralFlatness(spectrum);
@@ -51,20 +54,19 @@ public class FeatureExtraction {
 		return n+1;
 	}
 	
-	private double[][] powerSpectrum(float signal[]) {
-		int numberOfBlocks = (signal.length-blockSize)/stepSize+1;
+	private double[][] powerSpectrum(float signal[], int effectiveLength) {
+		int numberOfBlocks = (effectiveLength-blockSize)/stepSize+1;
+		
 		DoubleFFT_1D FFTObj = new DoubleFFT_1D(blockSize);
 		double[][] spectrum = new double[numberOfBlocks][blockSize/2];
 		
-		int signalSize = signal.length;
 		double[] block = new double[blockSize];
 
 		int counter=0;
 		
-		for (int i=0; (i + blockSize) < signalSize; i+=stepSize) {
+		for (int i=0; (i + blockSize) <= effectiveLength; i+=stepSize) {
 			for (int j=0; j<blockSize; ++j) {
 				block[j] = signal[i+j];
-				// if (counter==2) System.out.println(block[j]);
 			}
 			FFTObj.realForward(block);
 			
@@ -124,6 +126,7 @@ public class FeatureExtraction {
 			double mean = calcMean(spectrum[i]);
 			double gmean = calcGMean(spectrum[i]);
 			flatness[i] = gmean / mean;
+			// if (mean == 0) System.out.println("i = " + i + " numberOfBlocks = " + numberOfBlocks);
 		}
 		return flatness;
 	}
