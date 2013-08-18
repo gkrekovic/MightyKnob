@@ -19,8 +19,49 @@ DEFUZZIFY centroid_mean
 	TERM medium := (500, 0) (1000, 1) (10000, 0);
 	TERM high := (1000, 0) (10000, 1);
 	METHOD: COG;
-	DEFAULT := 1000;
+	DEFAULT := 800;
 END_DEFUZZIFY
+
+DEFUZZIFY centroid_stddev
+	TERM low := (100, 1) (1000, 0);
+	TERM medium := (500, 0) (1000, 1) (10000, 0);
+	TERM high := (1000, 0) (10000, 1);
+	METHOD: COG;
+	DEFAULT := 30;
+END_DEFUZZIFY
+
+DEFUZZIFY flux_mean
+	TERM low := (100, 1) (1000, 0);
+	TERM medium := (500, 0) (1000, 1) (10000, 0);
+	TERM high := (1000, 0) (10000, 1);
+	METHOD: COG;
+	DEFAULT := 2.0;
+END_DEFUZZIFY
+
+DEFUZZIFY flux_stddev
+	TERM low := (0, 1) (0.002, 0);
+	TERM medium := (0.001, 0) (0.01, 1) (0.1, 0);
+	TERM high := (0.01, 0) (1, 1);
+	METHOD: COG;
+	DEFAULT := 1.0;
+END_DEFUZZIFY
+
+DEFUZZIFY flatness_mean
+	TERM low := (0, 1) (0.002, 0);
+	TERM medium := (0.001, 0) (0.01, 1) (0.1, 0);
+	TERM high := (0.01, 0) (1, 1);
+	METHOD: COG;
+	DEFAULT := 0.002;
+END_DEFUZZIFY
+
+DEFUZZIFY flatness_stddev
+	TERM low := (0, 1) (0.002, 0);
+	TERM medium := (0.001, 0) (0.01, 1) (0.1, 0);
+	TERM high := (0.01, 0) (1, 1);
+	METHOD: COG;
+	DEFAULT := 0.002;
+END_DEFUZZIFY
+
 
 RULEBLOCK rules
 	AND : MIN;

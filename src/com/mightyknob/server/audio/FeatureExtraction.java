@@ -4,27 +4,31 @@ import java.util.ArrayList;
 
 import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
 
-
-
 public class FeatureExtraction {
 	
 	int blockSize;
 	int stepSize;
 	float sampleRate;
+	ArrayList<String> featureList;
 	
 	public FeatureExtraction(int blockSize, int stepSize, float sampleRate) {
 		this.blockSize = blockSize;
 		this.stepSize = stepSize;
-		this.sampleRate = sampleRate;		
+		this.sampleRate = sampleRate;
+		featureList = new ArrayList<String>();
 	}
 	
+	/**
+	 * @param signal - samples of the audio signal ranging from -1 to 1
+	 * @return Values of audio features extracted from the signal.
+	 */
 	public ArrayList<Double> extractFeatures(float signal[]) {
-		int effectiveLength = lastIndexBeforeZeros(signal);
-		
 		int numberOfBlocks = (signal.length-blockSize)/stepSize+1;
-		int effectiveNumberOfBlocks = (effectiveLength-blockSize)/stepSize+1;
 		
-		// System.out.println("Eln = " + effectiveLength + " Rln = " + signal.length + " ENb = " + effectiveNumberOfBlocks + " RalNumB = " + numberOfBlocks);
+		// For spectral-based features ending zeros in the signal are ignored. For that reason
+		// we need to calculate effective length of the signal and the number of blocks.
+		int effectiveLength = lastIndexBeforeZeros(signal);
+		int effectiveNumberOfBlocks = (effectiveLength-blockSize)/stepSize+1;
 		
 		double[][] spectrum = new double[effectiveNumberOfBlocks][blockSize/2];
 		double[] centroid = new double[effectiveNumberOfBlocks];
@@ -39,11 +43,22 @@ public class FeatureExtraction {
 		ArrayList<Double> result = new ArrayList<Double>();
 		
 		result.add(calcMean(centroid));
+		featureList.add("Mean of the spectral centroid");
+		
 		result.add(calcStdDev(centroid));
+		featureList.add("Standard deviation of the spectral centroid");
+		
 		result.add(calcMean(flux));
+		featureList.add("Mean of the spectral flux");
+
 		result.add(calcStdDev(flux));
+		featureList.add("Standard deviation of the spectral flux");
+		
 		result.add(calcMean(flatness));
+		featureList.add("Mean of the spectral flatness");
+				
 		result.add(calcStdDev(flatness));
+		featureList.add("Standard deviation of the spectral flatness");
 	
 		return result;
 	}
@@ -158,5 +173,9 @@ public class FeatureExtraction {
 	
 	private double calcStdDev(double[] array) {
 		return Math.sqrt(calcVariance(array));
+	}
+
+	public ArrayList<String> getFeatureList() {
+		return featureList;
 	}
 }

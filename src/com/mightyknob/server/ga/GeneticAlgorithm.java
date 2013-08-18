@@ -33,7 +33,7 @@ public class GeneticAlgorithm {
 	public void evolvePatch(ArrayList<Double> targetVector) {
 		PatchFactory factory = new PatchFactory(vst);
 		Collection<Patch> seedCandidates = new ArrayList<Patch>();
-		seedCandidates = factory.generateSeedCandidates();
+		seedCandidates = factory.generateSeedCandidates(populationSize);
 		
 		List<EvolutionaryOperator<Patch>> operators = new ArrayList<EvolutionaryOperator<Patch>>(2);
 		operators.add(new PatchMutation(mutationProbability, maxMutation));

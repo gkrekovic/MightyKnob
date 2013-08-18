@@ -25,6 +25,12 @@ public class ExpertSystem {
 		fis.setVariable("brightness", 0.3);
 		fis.evaluate();
 		vector.add(fis.getVariable("centroid_mean").getLatestDefuzzifiedValue());
+		vector.add(fis.getVariable("centroid_stddev").getLatestDefuzzifiedValue());
+		vector.add(fis.getVariable("flux_mean").getLatestDefuzzifiedValue());
+		vector.add(fis.getVariable("flux_stddev").getLatestDefuzzifiedValue());
+		vector.add(fis.getVariable("flatness_mean").getLatestDefuzzifiedValue());
+		vector.add(fis.getVariable("flatness_stddev").getLatestDefuzzifiedValue());
+
 		System.out.println(fis.getVariable("centroid_mean").getLatestDefuzzifiedValue());
 		return vector;
 	}

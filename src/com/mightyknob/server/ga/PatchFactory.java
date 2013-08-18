@@ -26,12 +26,13 @@ public class PatchFactory extends AbstractCandidateFactory<Patch>{
 		return new Patch(parameters);
 	}
 	
-	public ArrayList<Patch> generateSeedCandidates() {
+	public ArrayList<Patch> generateSeedCandidates(int populationSize) {
 		ArrayList<Patch> seedCandidates = new ArrayList<Patch>();
 		int numPrograms = vst.numPrograms();
 		int numParameters = vst.numParameters();
+		int n = Math.min(populationSize, numPrograms);
 		
-		for (int i = 0; i < numPrograms; ++i) {
+		for (int i = 0; i < n; ++i) {
 			vst.setProgram(i);
 			ArrayList<Float> parameters = new ArrayList<Float>(n);
 			for (int j = 0; j < numParameters; ++j) {
@@ -42,4 +43,7 @@ public class PatchFactory extends AbstractCandidateFactory<Patch>{
 		return seedCandidates;
 	}
 
+	public ArrayList<Patch> generateSeedCandidates() {
+		return generateSeedCandidates(vst.numParameters());
+	}
 }

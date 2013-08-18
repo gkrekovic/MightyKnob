@@ -33,14 +33,14 @@ public class MightyKnobServer {
 			PresetAnalyzer analyzer = new PresetAnalyzer(vst);
 			analyzer.analyzePresets();
 		}
-		/*
+		
 		try {
 			GeneticAlgorithm ga = new GeneticAlgorithm(properties, vst);
 			ExpertSystem es = new ExpertSystem(properties);
 			runAlgorithm(ga, es);
 		} catch (Exception e) {
 			System.err.println(e);
-		} */
+		}
 	}
 	
 	private static void runAlgorithm(GeneticAlgorithm ga, ExpertSystem es) {

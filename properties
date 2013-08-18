@@ -11,4 +11,4 @@ elite_count=5
 fcl_folder=./fcl/
 fcl_name=model.fcl
 
-preset_analyzer=on
+preset_analyzer=off
