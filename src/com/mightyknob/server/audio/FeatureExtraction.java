@@ -15,16 +15,18 @@ public class FeatureExtraction {
 	public FeatureExtraction(int blockSize, int stepSize, float sampleRate) {
 		this.blockSize = blockSize;
 		this.stepSize = stepSize;
-		this.sampleRate = sampleRate;
-		
+		this.sampleRate = sampleRate;		
 	}
 	
 	public ArrayList<Double> extractFeatures(float signal[]) {
 		int numberOfBlocks = (signal.length-blockSize)/stepSize+1;
-		double[][] spectrum = new double[numberOfBlocks][blockSize/2];
-		double[] centroid = new double[numberOfBlocks];
-		double[] flux = new double[numberOfBlocks];
-		double[] flatness = new double[numberOfBlocks];
+		int effectiveNumberOfBlocks = (lastIndexBeforeZeros(signal)-blockSize)/stepSize+1;
+		System.out.println("noB = " + numberOfBlocks + "  enoB = " + effectiveNumberOfBlocks);
+		
+		double[][] spectrum = new double[effectiveNumberOfBlocks][blockSize/2];
+		double[] centroid = new double[effectiveNumberOfBlocks];
+		double[] flux = new double[effectiveNumberOfBlocks];
+		double[] flatness = new double[effectiveNumberOfBlocks];
 		
 		spectrum = powerSpectrum(signal);
 		centroid = spectralCentroid(spectrum);
@@ -43,7 +45,13 @@ public class FeatureExtraction {
 		return result;
 	}
 	
-	public double[][] powerSpectrum(float signal[]) {
+	private int lastIndexBeforeZeros(float signal[]) {
+		int n = signal.length-1;
+		while (signal[n] == 0 && n>0) n--;
+		return n+1;
+	}
+	
+	private double[][] powerSpectrum(float signal[]) {
 		int numberOfBlocks = (signal.length-blockSize)/stepSize+1;
 		DoubleFFT_1D FFTObj = new DoubleFFT_1D(blockSize);
 		double[][] spectrum = new double[numberOfBlocks][blockSize/2];
