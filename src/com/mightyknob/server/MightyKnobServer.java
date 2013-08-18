@@ -29,17 +29,18 @@ public class MightyKnobServer {
 		
 		initVst(properties);
 		
-		/*
+		if (properties.getProperty("preset_analyzer", "off").compareToIgnoreCase("on") == 0) {
+			PresetAnalyzer analyzer = new PresetAnalyzer(vst);
+			analyzer.analyzePresets();
+		}
+		
 		try {
 			GeneticAlgorithm ga = new GeneticAlgorithm(properties, vst);
 			ExpertSystem es = new ExpertSystem(properties);
 			runAlgorithm(ga, es);
 		} catch (Exception e) {
 			System.err.println(e);
-		} */
-		
-		PresetAnalyzer analyzer = new PresetAnalyzer(vst);
-		analyzer.analyzePresets();
+		}
 	}
 	
 	private static void runAlgorithm(GeneticAlgorithm ga, ExpertSystem es) {
