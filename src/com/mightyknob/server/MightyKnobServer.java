@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import com.mightyknob.server.audio.FeatureVector;
 import com.mightyknob.server.ga.GeneticAlgorithm;
 import com.mightyknob.server.tools.PresetAnalyzer;
 import com.synthbot.audioio.vst.JVstAudioThread;
@@ -44,9 +45,7 @@ public class MightyKnobServer {
 	}
 	
 	private static void runAlgorithm(GeneticAlgorithm ga, ExpertSystem es) {
-		ArrayList<Double> targetVector = new ArrayList<Double>();
-		targetVector = es.evaluate();
-		ga.evolvePatch(targetVector);
+		ga.evolvePatch(es.evaluate());
 	}
 	
     private static void initVst(Properties properties) {

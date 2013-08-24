@@ -9,6 +9,7 @@ import javax.sound.midi.ShortMessage;
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
 import com.mightyknob.server.audio.FeatureExtraction;
+import com.mightyknob.server.audio.FeatureVector;
 import com.mightyknob.server.audio.Synth;
 import com.synthbot.audioplugin.vst.vst2.JVstHost2;
 
@@ -16,9 +17,9 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 
 	final static double MAX_DISTANCE = 20000.0;
 	private JVstHost2 vst;
-	ArrayList<Double> targetVector;
+	FeatureVector targetVector;
 	
-	public PatchEvaluator(JVstHost2 vst, ArrayList<Double> targetVector) {
+	public PatchEvaluator(JVstHost2 vst, FeatureVector targetVector) {
 		this.vst = vst;
 		this.targetVector = targetVector;
 	}
@@ -42,17 +43,22 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 		}
 			
 		FeatureExtraction Extractor = new FeatureExtraction(blockSize, stepSize, sampleRate);
-		ArrayList<Double> features = Extractor.extractFeatures(signal);
+		FeatureVector features = new FeatureVector(sampleRate);
+		features = Extractor.extractFeatures(signal);
 		return distance(features);
 	}
 
-	private double distance(ArrayList<Double> candidateVector)  {
-		if (candidateVector.size() != targetVector.size()) return MAX_DISTANCE;
+	private double distance(FeatureVector candidateVector)  {
+		int vectorSize = candidateVector.getSize();
+		if (vectorSize != targetVector.getSize()) return MAX_DISTANCE;
 		double d = 0;
-		for (int i = 0; i < candidateVector.size(); ++i) {
-			d += Math.abs(candidateVector.get(i) - targetVector.get(i));
+		
+		double[] candidateFeatures = candidateVector.getNormalizedFeatures();
+		double[] targetFeatures = targetVector.getNormalizedFeatures();
+		for (int i = 0; i < vectorSize; ++i) {
+			d += Math.abs(candidateFeatures[i] - targetFeatures[i]);
 		}
-		return d;
+		return d/vectorSize;
 	}
 	
 	@Override

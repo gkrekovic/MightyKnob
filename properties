@@ -1,5 +1,5 @@
 vst_folder=./vst/
-vst_name=mdaJX10.so
+vst_name=mdaDX10.so
 sample_rate=44100
 block_size=1024
 
@@ -11,4 +11,4 @@ elite_count=5
 fcl_folder=./fcl/
 fcl_name=model.fcl
 
-preset_analyzer=off
+preset_analyzer=on

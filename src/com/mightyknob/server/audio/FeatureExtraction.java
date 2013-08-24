@@ -22,7 +22,7 @@ public class FeatureExtraction {
 	 * @param signal - samples of the audio signal ranging from -1 to 1
 	 * @return Values of audio features extracted from the signal.
 	 */
-	public ArrayList<Double> extractFeatures(float signal[]) {
+	public FeatureVector extractFeatures(float signal[]) {
 		int numberOfBlocks = (signal.length-blockSize)/stepSize+1;
 		
 		// For spectral-based features ending zeros in the signal are ignored. For that reason
@@ -40,27 +40,27 @@ public class FeatureExtraction {
 		flux = spectralFlux(spectrum);
 		flatness = spectralFlatness(spectrum);
 		
-		ArrayList<Double> result = new ArrayList<Double>();
+		FeatureVector vector = new FeatureVector(sampleRate);
 		
-		result.add(calcMean(centroid));
+		vector.setCentroidMean(calcMean(centroid));
 		featureList.add("Mean of the spectral centroid");
 		
-		result.add(calcStdDev(centroid));
+		vector.setCentroidStddev(calcStdDev(centroid));
 		featureList.add("Standard deviation of the spectral centroid");
 		
-		result.add(calcMean(flux));
+		vector.setFluxMean(calcMean(flux));
 		featureList.add("Mean of the spectral flux");
 
-		result.add(calcStdDev(flux));
+		vector.setFluxStddev(calcStdDev(flux));
 		featureList.add("Standard deviation of the spectral flux");
 		
-		result.add(calcMean(flatness));
+		vector.setFlatnessMean(calcMean(flatness));
 		featureList.add("Mean of the spectral flatness");
 				
-		result.add(calcStdDev(flatness));
+		vector.setFlatnessStddev(calcStdDev(flatness));
 		featureList.add("Standard deviation of the spectral flatness");
 	
-		return result;
+		return vector;
 	}
 	
 	private int lastIndexBeforeZeros(float signal[]) {
@@ -123,9 +123,17 @@ public class FeatureExtraction {
 		
 		for (int i=1; i<numberOfBlocks; ++i) {
 			double sum = 0;
+			double difference;
+			double maxSpec1 = 0;
+			double maxSpec2 = 0;
+			
 			for (int j=0; j<blockSize/2; ++j) {
-				double difference;
-				difference = spectrum[i][j] - spectrum[i-1][j];
+				if (spectrum[i-1][j] > maxSpec1) maxSpec1 = spectrum[i-1][j];
+				if (spectrum[i][j] > maxSpec2) maxSpec2 = spectrum[i][j];
+			}
+			
+			for (int j=0; j<blockSize/2; ++j) {
+				difference = (spectrum[i][j]/maxSpec2) - (spectrum[i-1][j]/maxSpec1);
 				sum += (difference*difference);
 			}
 			flux[i] = sum;
