@@ -132,6 +132,9 @@ public class FeatureExtraction {
 				if (spectrum[i][j] > maxSpec2) maxSpec2 = spectrum[i][j];
 			}
 			
+			if (maxSpec1 == 0) maxSpec1 = 1;
+			if (maxSpec2 == 0) maxSpec2 = 1;
+			
 			for (int j=0; j<blockSize/2; ++j) {
 				difference = (spectrum[i][j]/maxSpec2) - (spectrum[i-1][j]/maxSpec1);
 				sum += (difference*difference);
@@ -148,7 +151,11 @@ public class FeatureExtraction {
 		for (int i=0; i<numberOfBlocks; ++i) {
 			double mean = calcMean(spectrum[i]);
 			double gmean = calcGMean(spectrum[i]);
-			flatness[i] = gmean / mean;
+			if (mean == 0) {
+				flatness[i] = 1;
+			} else {
+				flatness[i] = gmean / mean;
+			}
 			// if (mean == 0) System.out.println("i = " + i + " numberOfBlocks = " + numberOfBlocks);
 		}
 		return flatness;

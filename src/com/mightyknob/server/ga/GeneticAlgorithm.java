@@ -12,6 +12,7 @@ import com.synthbot.audioplugin.vst.vst2.JVstHost2;
 import org.uncommons.watchmaker.framework.*;
 import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
 import org.uncommons.watchmaker.framework.selection.RouletteWheelSelection;
+import org.uncommons.watchmaker.framework.termination.GenerationCount;
 import org.uncommons.watchmaker.framework.termination.Stagnation;
 import org.uncommons.maths.random.MersenneTwisterRNG;
 
@@ -44,8 +45,10 @@ public class GeneticAlgorithm {
 		EvolutionEngine<Patch> engine = new GenerationalEvolutionEngine<Patch>(factory,
 				pipeline, new PatchEvaluator(vst, targetVector), new RouletteWheelSelection(), new MersenneTwisterRNG());
 		
+		engine.addEvolutionObserver(new EvolutionLogger<Patch>());
+		
 		Patch p = new Patch();		
-		p = engine.evolve(populationSize, eliteCount, seedCandidates, new Stagnation(5, false));
+		p = engine.evolve(populationSize, eliteCount, seedCandidates, new GenerationCount(10));
 		Synth synth = new Synth(vst);
 		synth.preview(p);
 		

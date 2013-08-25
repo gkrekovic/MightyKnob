@@ -15,7 +15,7 @@ import com.synthbot.audioplugin.vst.vst2.JVstHost2;
 
 public class PatchEvaluator implements FitnessEvaluator<Patch> {
 
-	final static double MAX_DISTANCE = 20000.0;
+	final static double MAX_DISTANCE = 1;
 	private JVstHost2 vst;
 	FeatureVector targetVector;
 	
@@ -39,13 +39,14 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 			signal = synth.synthesize(candidate, n);
 		} catch (Exception e) {
 			System.err.println("Exception: " + e.getMessage());
-			return 20000;
+			return MAX_DISTANCE;
 		}
 			
 		FeatureExtraction Extractor = new FeatureExtraction(blockSize, stepSize, sampleRate);
 		FeatureVector features = new FeatureVector(sampleRate);
 		features = Extractor.extractFeatures(signal);
-		return distance(features);
+		double fitness = distance(features);
+		return fitness;
 	}
 
 	private double distance(FeatureVector candidateVector)  {
@@ -58,7 +59,14 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 		for (int i = 0; i < vectorSize; ++i) {
 			d += Math.abs(candidateFeatures[i] - targetFeatures[i]);
 		}
-		return d/vectorSize;
+		
+		if (Double.isNaN(d)) {
+			/* for (int i = 0; i < vectorSize; ++i) System.out.print(candidateFeatures[i]+ " ");
+			System.out.println(); */
+			return MAX_DISTANCE;
+		} else {
+			return d/vectorSize;
+		}
 	}
 	
 	@Override
