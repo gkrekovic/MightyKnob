@@ -29,23 +29,20 @@ public class MightyKnobServer {
 		properties.load(fis);
 		
 		initVst(properties);
-		
-		if (properties.getProperty("preset_analyzer", "off").compareToIgnoreCase("on") == 0) {
-			PresetAnalyzer analyzer = new PresetAnalyzer(vst);
-			analyzer.analyzePresets();
-		}
+
+		GeneticAlgorithm ga = new GeneticAlgorithm(properties, vst);
+		ExpertSystem es = new ExpertSystem(properties);
 		
 		try {
-			GeneticAlgorithm ga = new GeneticAlgorithm(properties, vst);
-			ExpertSystem es = new ExpertSystem(properties);
-			runAlgorithm(ga, es);
+			ga.evolvePatch(es.evaluate());
 		} catch (Exception e) {
 			System.err.println(e);
 		}
-	}
-	
-	private static void runAlgorithm(GeneticAlgorithm ga, ExpertSystem es) {
-		ga.evolvePatch(es.evaluate());
+
+		if (properties.getProperty("preset_analyzer", "off").compareToIgnoreCase("on") == 0) {
+			PresetAnalyzer analyzer = new PresetAnalyzer(vst);
+			analyzer.analyzePresets(es.evaluate());
+		}
 	}
 	
     private static void initVst(Properties properties) {
@@ -69,13 +66,13 @@ public class MightyKnobServer {
 		}
 		
 		// start the audio thread
-	    audioThread = new JVstAudioThread(vst);
+	    /* audioThread = new JVstAudioThread(vst);
 	    Thread thread = new Thread(audioThread);
 	    thread.setName(AUDIO_THREAD); // for easy debugging
 	    thread.setDaemon(true); // allows the JVM to exit normally
 	    
-	    // thread.setPriority(Thread.MAX_PRIORITY);
-	    thread.start();
+	    thread.setPriority(Thread.MAX_PRIORITY);
+	    thread.start(); */
     }
 
 }

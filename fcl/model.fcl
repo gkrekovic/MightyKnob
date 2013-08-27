@@ -35,7 +35,7 @@ DEFUZZIFY flux_mean
 	TERM medium := (500, 0) (1000, 1) (10000, 0);
 	TERM high := (1000, 0) (10000, 1);
 	METHOD: COG;
-	DEFAULT := 2.0;
+	DEFAULT := 0.3;
 END_DEFUZZIFY
 
 DEFUZZIFY flux_stddev
@@ -43,7 +43,7 @@ DEFUZZIFY flux_stddev
 	TERM medium := (0.001, 0) (0.01, 1) (0.1, 0);
 	TERM high := (0.01, 0) (1, 1);
 	METHOD: COG;
-	DEFAULT := 1.0;
+	DEFAULT := 0.3;
 END_DEFUZZIFY
 
 DEFUZZIFY flatness_mean
@@ -51,7 +51,7 @@ DEFUZZIFY flatness_mean
 	TERM medium := (0.001, 0) (0.01, 1) (0.1, 0);
 	TERM high := (0.01, 0) (1, 1);
 	METHOD: COG;
-	DEFAULT := 0.002;
+	DEFAULT := 0.03;
 END_DEFUZZIFY
 
 DEFUZZIFY flatness_stddev
@@ -59,7 +59,7 @@ DEFUZZIFY flatness_stddev
 	TERM medium := (0.001, 0) (0.01, 1) (0.1, 0);
 	TERM high := (0.01, 0) (1, 1);
 	METHOD: COG;
-	DEFAULT := 0.002;
+	DEFAULT := 0.02;
 END_DEFUZZIFY
 
 

@@ -65,7 +65,7 @@ public class FeatureExtraction {
 	
 	private int lastIndexBeforeZeros(float signal[]) {
 		int n = signal.length-1;
-		while (signal[n] == 0 && n>0) n--;
+		while (signal[n] < 0.08 && n>0) n--;
 		return n+1;
 	}
 	
@@ -171,10 +171,11 @@ public class FeatureExtraction {
 	
 	private double calcGMean(double[] array)  {
 		double sum = 0;
-		for (double a : array) {
-			sum += Math.log(a);
+		int n = array.length;
+		for (int i = 0; i < n; ++i) {
+			sum += Math.log(array[i]);
 		}
-		return Math.exp(sum/array.length);
+		return Math.exp(sum/n);
 	}
 	
 	private double calcVariance(double[] array) {

@@ -13,7 +13,6 @@ import org.uncommons.watchmaker.framework.*;
 import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
 import org.uncommons.watchmaker.framework.selection.RouletteWheelSelection;
 import org.uncommons.watchmaker.framework.termination.GenerationCount;
-import org.uncommons.watchmaker.framework.termination.Stagnation;
 import org.uncommons.maths.random.MersenneTwisterRNG;
 
 public class GeneticAlgorithm {
@@ -42,15 +41,21 @@ public class GeneticAlgorithm {
 		operators.add(new PatchCrossover());
 		EvolutionaryOperator<Patch> pipeline = new EvolutionPipeline<Patch>(operators);
 		
-		EvolutionEngine<Patch> engine = new GenerationalEvolutionEngine<Patch>(factory,
+		GenerationalEvolutionEngine<Patch> engine = new GenerationalEvolutionEngine<Patch>(factory,
 				pipeline, new PatchEvaluator(vst, targetVector), new RouletteWheelSelection(), new MersenneTwisterRNG());
 		
-		engine.addEvolutionObserver(new EvolutionLogger<Patch>());
+		engine.setSingleThreaded(true);
 		
-		Patch p = new Patch();		
-		p = engine.evolve(populationSize, eliteCount, seedCandidates, new GenerationCount(10));
+		engine.addEvolutionObserver(new EvolutionLogger<Patch>());
+		System.out.println("EC = " + eliteCount);
+
+		// Collection<EvaluatedCandidate<Patch>> results = new ArrayList<EvaluatedCandidate<Patch>>();
+		// results = engine.evolvePopulation(populationSize, eliteCount, /* seedCandidates, */ new GenerationCount(10));
+		
+		Patch p = new Patch();
+		p = engine.evolve(populationSize, eliteCount, seedCandidates, new GenerationCount(20));
+		
 		Synth synth = new Synth(vst);
 		synth.preview(p);
-		
 	}
 }

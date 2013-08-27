@@ -70,12 +70,15 @@ public class Synth {
 			signal[i] = signal[i]/maxSignal;
 		}
 		
+		// Thread.sleep(100);  // Questionable!!!!!!!!
+		
 		try {
 			midiMessage.setMessage(ShortMessage.NOTE_OFF, 0, midiNoteNumber, 100);
 		} catch (InvalidMidiDataException e) {
 			e.printStackTrace();
 		}
 		vst.queueMidiMessage(midiMessage);
+		
 		
 		return signal;
 	}

@@ -1,6 +1,7 @@
 package com.mightyknob.server.ga;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -80,8 +81,8 @@ public class PatchCrossover extends AbstractCrossover<Patch> {
 				}
 			}
 			
-			parameters1 = (ArrayList<Float>) temp1.clone();
-			parameters2 = (ArrayList<Float>) temp2.clone();
+			parameters1 = new ArrayList<Float>(temp1);
+			parameters2 = new ArrayList<Float>(temp2);
 			
 		}
 		

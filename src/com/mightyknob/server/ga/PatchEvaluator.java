@@ -1,10 +1,6 @@
 package com.mightyknob.server.ga;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.ShortMessage;
 
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
@@ -32,7 +28,7 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 		int stepSize = blockSize;
 		float sampleRate = vst.getSampleRate();
 	
-		float [] signal = new float[n];
+		float[] signal = new float[n];
 
 		Synth synth = new Synth(vst);
 		try {
@@ -46,6 +42,25 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 		FeatureVector features = new FeatureVector(sampleRate);
 		features = Extractor.extractFeatures(signal);
 		double fitness = distance(features);
+		
+		/*
+		System.out.print("Params: ");
+		for (double params : candidate.getParameters()) {
+			System.out.print(params + ", ");
+		}
+		System.out.println();
+		
+		System.out.print("Features: ");
+		for (double params : features.getNormalizedFeatures()) {
+			System.out.print(params + ", ");
+		}
+		System.out.println();		
+		
+		System.out.println("Fitness: " + fitness);
+		System.out.println();
+		
+		synth.preview(candidate, "p"+System.currentTimeMillis()+".wav");  */
+		
 		return fitness;
 	}
 
@@ -62,7 +77,7 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 		
 		if (Double.isNaN(d)) {
 			/* for (int i = 0; i < vectorSize; ++i) System.out.print(candidateFeatures[i]+ " ");
-			System.out.println(); */
+			System.out.println("Opet opet"); */
 			return MAX_DISTANCE;
 		} else {
 			return d/vectorSize;

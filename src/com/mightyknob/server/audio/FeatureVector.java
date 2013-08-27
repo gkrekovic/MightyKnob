@@ -50,7 +50,7 @@ public class FeatureVector {
 		features[1] = Math.log((centroidStddev/sampleRate)*(Math.exp(k)-1)+1)/k;
 		features[2] = fluxMean;
 		features[3] = fluxStddev;
-		features[4] = flatnessMean;
+		features[4] =  flatnessMean; // 10*Math.log10(flatnessMean);
 		features[5] = flatnessStddev;		
 		return features;
 	}
