@@ -5,8 +5,3 @@
 5. try different tremination criteria for genetic algorithm
 6. consider using standard devation of features relatively to the mean, since the features are not linear to the human perception!
 	- use sigmas instead of std_dev?
-
-_________________________
-
-- the 'release' part of the note is ignored in this implementation, because the sound is stopped at 1 second
- 

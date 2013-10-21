@@ -18,6 +18,10 @@ public class Synth {
 	}
 	
 	public float[] synthesize(Patch candidate, int n) throws Exception {
+		return synthesize(candidate, n, n);
+	}
+		
+	public float[] synthesize(Patch candidate, int n, int m) throws Exception {
 		ArrayList<Float> parameters = candidate.getParameters();
 		int counter=0;
 		for (float p : parameters) {
@@ -28,22 +32,17 @@ public class Synth {
 		
 		float[][] signalInput = new float[2][blockSize];
 		float[][] signalOutput = new float[2][blockSize];
-				
-		int midiNoteNumber = 50;
-		ShortMessage midiMessage = new ShortMessage();
-		try {
-			midiMessage.setMessage(ShortMessage.NOTE_ON, 0, midiNoteNumber, 100);
-		} catch (InvalidMidiDataException e) {
-			e.printStackTrace();
-		}
-		vst.queueMidiMessage(midiMessage);
 		
 		float [] signal = new float[n];
 
-		int numberOfBlocks = n/blockSize;
+		int totalNumberOfBlocks = n/blockSize;
+		int noteNumberOfBlocks = m/blockSize;
+		int noteNumber = 50;
+		queueNote(noteNumber, ShortMessage.NOTE_ON);
+		boolean noteOn = true;
 		float maxSignal = 0;
 
-		for (int i=0; i<numberOfBlocks; ++i) {
+		for (int i=0; i<totalNumberOfBlocks; ++i) {
 			
 			for (int j=0; j<blockSize; ++j) {
 				signalInput[0][j] = 0;
@@ -53,6 +52,11 @@ public class Synth {
 			}
 			
 			vst.processReplacing(signalInput, signalOutput, blockSize);
+			
+			if (noteOn && (i >= noteNumberOfBlocks)) {
+				noteOn = false;
+				queueNote(noteNumber, ShortMessage.NOTE_OFF);
+			}
 		
 			// Stereo to mono
 			for (int j=0; j<blockSize; ++j) {
@@ -70,26 +74,27 @@ public class Synth {
 			signal[i] = signal[i]/maxSignal;
 		}
 		
-		// Thread.sleep(100);  // Questionable!!!!!!!!
-		
+		return signal;
+	}
+	
+	private void queueNote(int midiNoteNumber, int command) {
+		ShortMessage midiMessage = new ShortMessage();
 		try {
-			midiMessage.setMessage(ShortMessage.NOTE_OFF, 0, midiNoteNumber, 100);
+			midiMessage.setMessage(command, 0, midiNoteNumber, 100);
 		} catch (InvalidMidiDataException e) {
 			e.printStackTrace();
 		}
 		vst.queueMidiMessage(midiMessage);
-		
-		
-		return signal;
 	}
 	
 	public void preview(Patch candidate, String fileName) {
-		int n = 88200;
+		int n = 132300;
+		int m = 88200;
 		float [] signal = new float[n];
 
 		Synth synth = new Synth(vst);
 		try {
-			signal = synth.synthesize(candidate, n);
+			signal = synth.synthesize(candidate, n, m);
 		} catch (Exception e) {
 			System.err.println("Exception: " + e.getMessage());
 			return;

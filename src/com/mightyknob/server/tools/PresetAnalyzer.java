@@ -21,7 +21,8 @@ public class PresetAnalyzer {
 	}
 	
 	public void analyzePresets(FeatureVector targetVector) {
-		int n = 88200;
+		int n = 132300;
+		int m = 88200;
 		int blockSize = vst.getBlockSize();
 		int stepSize = blockSize;
 		float sampleRate = vst.getSampleRate();
@@ -36,7 +37,7 @@ public class PresetAnalyzer {
 		for(Patch preset:seedCandidates) {
 			Synth synth = new Synth(vst);
 			try {
-				signal = synth.synthesize(preset, n);
+				signal = synth.synthesize(preset, n, m);
 			} catch (Exception e) {
 				System.err.println("Exception: " + e.getMessage());
 			}

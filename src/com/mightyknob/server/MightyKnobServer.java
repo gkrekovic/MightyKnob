@@ -29,7 +29,7 @@ public class MightyKnobServer {
 		properties.load(fis);
 		
 		initVst(properties);
-
+		
 		GeneticAlgorithm ga = new GeneticAlgorithm(properties, vst);
 		ExpertSystem es = new ExpertSystem(properties);
 		
