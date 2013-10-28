@@ -23,7 +23,7 @@ public class PatchFactory extends AbstractCandidateFactory<Patch>{
 		for (int i=0; i<n; ++i) {
 			parameters.add(rng.nextFloat());
 		}
-		return new Patch(parameters);
+		return new Patch(parameters, "random");
 	}
 	
 	public ArrayList<Patch> generateSeedCandidates(int populationSize) {
@@ -38,7 +38,7 @@ public class PatchFactory extends AbstractCandidateFactory<Patch>{
 			for (int j = 0; j < numParameters; ++j) {
 				parameters.add(vst.getParameter(j));
 			}
-			seedCandidates.add(new Patch(parameters));
+			seedCandidates.add(new Patch(parameters, "preset" + i));
 		}
 		return seedCandidates;
 	}

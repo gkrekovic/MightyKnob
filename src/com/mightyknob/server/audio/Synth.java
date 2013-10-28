@@ -63,7 +63,7 @@ public class Synth {
 				int k = i*blockSize+j;
 				signal[k] = signalOutput[0][j]+signalOutput[1][j];
 				if (Float.isNaN(signal[k])) {
-					throw new Exception("NaN value occurred among samples.");
+					throw new Exception("NaN value occurred among samples. Index: " + k);
 				}
 				if (Math.abs(signal[k]) > maxSignal) maxSignal = Math.abs(signal[k]);
 			}

@@ -9,13 +9,23 @@ public class FeatureExtraction {
 	int blockSize;
 	int stepSize;
 	float sampleRate;
-	ArrayList<String> featureList;
+	boolean extractAll;
+	FeatureVector targetVector;
 	
 	public FeatureExtraction(int blockSize, int stepSize, float sampleRate) {
 		this.blockSize = blockSize;
 		this.stepSize = stepSize;
 		this.sampleRate = sampleRate;
-		featureList = new ArrayList<String>();
+		extractAll = true;
+	}
+	
+	
+	public FeatureExtraction(int blockSize, int stepSize, float sampleRate, FeatureVector targetVector) {
+		this.blockSize = blockSize;
+		this.stepSize = stepSize;
+		this.sampleRate = sampleRate;
+		this.targetVector = targetVector;
+		extractAll = false;
 	}
 	
 	/**
@@ -42,24 +52,24 @@ public class FeatureExtraction {
 		
 		FeatureVector vector = new FeatureVector(sampleRate);
 		
-		vector.setCentroidMean(calcMean(centroid));
-		featureList.add("Mean of the spectral centroid");
+		if (extractAll || targetVector.centroidMean != -1)
+			vector.setCentroidMean(calcMean(centroid));
+			
+		if (extractAll || targetVector.centroidStddev != -1)
+			vector.setCentroidStddev(calcStdDev(centroid));
 		
-		vector.setCentroidStddev(calcStdDev(centroid));
-		featureList.add("Standard deviation of the spectral centroid");
+		if (extractAll || targetVector.fluxMean != -1)
+			vector.setFluxMean(calcMean(flux));
 		
-		vector.setFluxMean(calcMean(flux));
-		featureList.add("Mean of the spectral flux");
-
-		vector.setFluxStddev(calcStdDev(flux));
-		featureList.add("Standard deviation of the spectral flux");
+		if (extractAll || targetVector.fluxStddev != -1)
+			vector.setFluxStddev(calcStdDev(flux));
 		
-		vector.setFlatnessMean(calcMean(flatness));
-		featureList.add("Mean of the spectral flatness");
-				
-		vector.setFlatnessStddev(calcStdDev(flatness));
-		featureList.add("Standard deviation of the spectral flatness");
-	
+		if (extractAll || targetVector.flatnessMean != -1)
+			vector.setFlatnessMean(calcMean(flatness));
+		
+		if (extractAll || targetVector.flatnessStddev != -1)
+			vector.setFlatnessStddev(calcStdDev(flatness));
+		
 		return vector;
 	}
 	
@@ -189,9 +199,5 @@ public class FeatureExtraction {
 	
 	private double calcStdDev(double[] array) {
 		return Math.sqrt(calcVariance(array));
-	}
-
-	public ArrayList<String> getFeatureList() {
-		return featureList;
 	}
 }

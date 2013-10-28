@@ -53,7 +53,7 @@ public class GeneticAlgorithm {
 		// results = engine.evolvePopulation(populationSize, eliteCount, /* seedCandidates, */ new GenerationCount(10));
 		
 		Patch p = new Patch();
-		p = engine.evolve(populationSize, eliteCount, seedCandidates, new GenerationCount(20));
+		p = engine.evolve(populationSize, eliteCount, seedCandidates, new GenerationCount(15));
 		
 		Synth synth = new Synth(vst);
 		synth.preview(p);

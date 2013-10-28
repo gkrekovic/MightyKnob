@@ -52,7 +52,8 @@ public class PresetAnalyzer {
 			System.out.print("distance: " + distance(targetVector, featureVector));
 			System.out.println("preset" + i);
 
-			new Synth(vst).preview(preset, "preset" + i +".wav");
+			int blabla = i+16;
+			new Synth(vst).preview(preset, "preset" + blabla +".wav");
 			i++;
 		}
 		

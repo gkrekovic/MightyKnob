@@ -13,30 +13,36 @@ public class FeatureVector {
 	
 	public FeatureVector(double sampleRate) {
 		this.sampleRate = sampleRate;
+		centroidMean = -1;
+		centroidStddev = -1;
+		fluxMean = -1;
+		fluxStddev = -1;
+		flatnessMean = -1;
+		flatnessStddev = -1;
 	}
 	
 	public void setCentroidMean(double x) {
-		centroidMean = x;
+		centroidMean = (Double.isNaN(x)) ? -1 : x;
 	}
 	
 	public void setCentroidStddev(double x) {
-		centroidStddev = x;
+		centroidStddev = (Double.isNaN(x)) ? -1 : x;
 	}
 	
 	public void setFluxMean(double x) {
-		fluxMean = x;
+		fluxMean = (Double.isNaN(x)) ? -1 : x;
 	}
 	
 	public void setFluxStddev(double x) {
-		fluxStddev = x;
+		fluxStddev = (Double.isNaN(x)) ? -1 : x;
 	}
 	
 	public void setFlatnessMean(double x) {
-		flatnessMean = x;
+		flatnessMean = (Double.isNaN(x)) ? -1 : x;
 	}
 	
 	public void setFlatnessStddev(double x) {
-		flatnessStddev = x;
+		flatnessStddev = (Double.isNaN(x)) ? -1 : x;
 	}
 	
 	public int getSize() {
@@ -64,5 +70,14 @@ public class FeatureVector {
 		features[4] = flatnessMean;
 		features[5] = flatnessStddev;
 		return features;
+	}
+	
+	public String toString() {
+		StringBuilder s = new StringBuilder();
+		double[] features = getFeatures();
+		for (double f : features) {
+			s.append(String.format("%8.4f ", f));
+		}
+		return s.toString();
 	}
 } 

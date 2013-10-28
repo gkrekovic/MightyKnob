@@ -21,21 +21,23 @@ public class ExpertSystem {
 		
 		if (fis == null) {
 			throw new IOException("Cannot load file: '" + fileName + "'");
-		}	}
+		}
+	}
 	
 	public FeatureVector evaluate() {
 		FeatureVector vector = new FeatureVector(sampleRate);
 		
-		fis.setVariable("brightness", 0.3);
+		fis.setVariable("brightness", 0.9);
 		fis.evaluate();
-		vector.setCentroidMean(fis.getVariable("centroid_mean").getLatestDefuzzifiedValue());
-		vector.setCentroidStddev(fis.getVariable("centroid_stddev").getLatestDefuzzifiedValue());
-		vector.setFluxMean(fis.getVariable("flux_mean").getLatestDefuzzifiedValue());
-		vector.setFluxStddev(fis.getVariable("flux_stddev").getLatestDefuzzifiedValue());
-		vector.setFlatnessMean(fis.getVariable("flatness_mean").getLatestDefuzzifiedValue());
-		vector.setFlatnessStddev(fis.getVariable("flatness_stddev").getLatestDefuzzifiedValue());
-
-		System.out.println(fis.getVariable("centroid_mean").getLatestDefuzzifiedValue());
+		vector.setCentroidMean(fis.getVariable("centroid_mean").getValue());
+		vector.setCentroidStddev(fis.getVariable("centroid_stddev").getValue());
+		vector.setFluxMean(fis.getVariable("flux_mean").getValue());
+		vector.setFluxStddev(fis.getVariable("flux_stddev").getValue());
+		vector.setFlatnessMean(fis.getVariable("flatness_mean").getValue());
+		vector.setFlatnessStddev(fis.getVariable("flatness_stddev").getValue());
+		
+		System.out.println("Target vector: " + vector.toString());
+		
 		return vector;
 	}
 }

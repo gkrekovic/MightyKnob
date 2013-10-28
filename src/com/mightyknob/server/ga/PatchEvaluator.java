@@ -22,7 +22,8 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 	
 	@Override
 	public double getFitness(Patch candidate, List<? extends Patch> population) {
-		int n = 88200;
+		int n = 132300;
+		int m = 88200;
 		
 		int blockSize = vst.getBlockSize();
 		int stepSize = blockSize;
@@ -32,9 +33,9 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 
 		Synth synth = new Synth(vst);
 		try {
-			signal = synth.synthesize(candidate, n);
+			signal = synth.synthesize(candidate, n, m);
 		} catch (Exception e) {
-			System.err.println("Exception: " + e.getMessage());
+			System.err.println(candidate.name + " >> Exception: " + e.getMessage());
 			return MAX_DISTANCE;
 		}
 			
@@ -42,24 +43,6 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 		FeatureVector features = new FeatureVector(sampleRate);
 		features = Extractor.extractFeatures(signal);
 		double fitness = distance(features);
-		
-		/*
-		System.out.print("Params: ");
-		for (double params : candidate.getParameters()) {
-			System.out.print(params + ", ");
-		}
-		System.out.println();
-		
-		System.out.print("Features: ");
-		for (double params : features.getNormalizedFeatures()) {
-			System.out.print(params + ", ");
-		}
-		System.out.println();		
-		
-		System.out.println("Fitness: " + fitness);
-		System.out.println();
-		
-		synth.preview(candidate, "p"+System.currentTimeMillis()+".wav");  */
 		
 		return fitness;
 	}
@@ -70,17 +53,20 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 		double d = 0;
 		
 		double[] candidateFeatures = candidateVector.getNormalizedFeatures();
-		double[] targetFeatures = targetVector.getNormalizedFeatures();
+		double[] targetFeatures = targetVector.getFeatures(); // privremeni hack
+
+		int k = 0;
 		for (int i = 0; i < vectorSize; ++i) {
-			d += Math.abs(candidateFeatures[i] - targetFeatures[i]);
+			if (targetFeatures[i] != -1) {
+				d += Math.abs(candidateFeatures[i] - targetFeatures[i]);
+				k++;
+			}
 		}
 		
 		if (Double.isNaN(d)) {
-			/* for (int i = 0; i < vectorSize; ++i) System.out.print(candidateFeatures[i]+ " ");
-			System.out.println("Opet opet"); */
 			return MAX_DISTANCE;
 		} else {
-			return d/vectorSize;
+			return d/k;
 		}
 	}
 	
