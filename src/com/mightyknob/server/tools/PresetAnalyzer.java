@@ -11,8 +11,11 @@ import com.mightyknob.server.ga.Patch;
 import com.mightyknob.server.ga.PatchFactory;
 import com.synthbot.audioplugin.vst.vst2.JVstHost2;
 
+/**  
+ * @author Gordan Kreković
+ * @version 1.0.0
+ */
 public class PresetAnalyzer {
-
 	JVstHost2 vst;
 	
 	final double MAX_DISTANCE = 1;

@@ -12,24 +12,49 @@ import com.mightyknob.server.tools.PresetAnalyzer;
 import com.synthbot.audioplugin.vst.JVstLoadException;
 import com.synthbot.audioplugin.vst.vst2.JVstHost2;
 
+/**  
+ * @author Gordan Kreković
+ * @version 1.0.0
+ */
 public class MightyKnobServer {
-
-	// private static final long serialVersionUID = 1L;
 	static JVstHost2 vst;
 	
 	/**
+	 * Initializes and starts the algorithm. 
+	 * <p>
+	 * This is the main method which reads the properties file, Initializes a VST synth,
+	 * genetic algorithm, and expert system. The properties file name can be passed as a
+	 * program argument.
 	 * @param args
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
+		// Initialize properties
 		Properties properties = new Properties();
-		FileInputStream fis = new FileInputStream("properties"); 
+		String propertiesFileName;
+		if (args.length > 0) {
+			propertiesFileName = args[0];
+		} else {
+			propertiesFileName = "properties";
+		}
+		FileInputStream fis = new FileInputStream(propertiesFileName); 
 		properties.load(fis);
-
-		initVst(properties);
 		
-		GeneticAlgorithm ga = new GeneticAlgorithm(properties, vst);
+		// Initialize the VST synth
+		String vstFolder = properties.getProperty("vst_folder");
+		String vstName = properties.getProperty("vst_name");
+		float sampleRate = Integer.parseInt(properties.getProperty("sample_rate"));
+		int blockSize = Integer.parseInt(properties.getProperty("block_size"));
+		initVst(vstFolder+vstName, sampleRate, blockSize);
 		
+		// Initialize the genetic algorithm
+		float mutationProbability = Float.parseFloat(properties.getProperty("mutation_probability", "0.2"));
+		float maxMutation = Float.parseFloat(properties.getProperty("max_mutation", "0.2"));
+		int populationSize = Integer.parseInt(properties.getProperty("population_size", "30"));
+		int eliteCount = Integer.parseInt(properties.getProperty("elite_count", "5"));
+		GeneticAlgorithm ga = new GeneticAlgorithm(mutationProbability, maxMutation, populationSize, eliteCount, vst);
+		
+		// Initialize the expert system
 		String fclFolder = properties.getProperty("fcl_folder");
 		String fclFileName = properties.getProperty("fcl_name");
 		ExpertSystem es = new ExpertSystem(fclFolder + fclFileName);
@@ -46,17 +71,18 @@ public class MightyKnobServer {
 		}
 	}
 	
-    private static void initVst(Properties properties) {
+	/** 
+	 * Initializes a VST synth using JVstHost2
+	 * <p>
+	 * Parameters are defined in the properties file. In this implementation the audio thread
+	 * is not started, because it uses CPU time unnecessarly.
+	 * */
+    private static void initVst(String vstFileName, float sampleRate, int blockSize) {
     	vst = null;
-		String vstFolder = properties.getProperty("vst_folder");
-		String vstName = properties.getProperty("vst_name");
-		File vstFile = new File(vstFolder+vstName);
-		
-		final float SAMPLE_RATE = Integer.parseInt(properties.getProperty("sample_rate"));
-		final int BLOCK_SIZE = Integer.parseInt(properties.getProperty("block_size"));
+		File vstFile = new File(vstFileName);
 				
 		try {
-			vst = JVstHost2.newInstance(vstFile, SAMPLE_RATE, BLOCK_SIZE);
+			vst = JVstHost2.newInstance(vstFile, sampleRate, blockSize);
 		} catch (FileNotFoundException fnfe) {
 			fnfe.printStackTrace(System.err);
 		} catch (JVstLoadException jvle) {

@@ -1,5 +1,9 @@
 package com.mightyknob.server.audio;
 
+/**  
+ * @author Gordan Kreković
+ * @version 1.0.0
+ */
 public class NormalizedFeatureVector extends AbstractFeatureVector {
 
 	@Override

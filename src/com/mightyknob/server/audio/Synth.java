@@ -9,50 +9,82 @@ import javax.sound.midi.ShortMessage;
 import com.mightyknob.server.ga.Patch;
 import com.synthbot.audioplugin.vst.vst2.JVstHost2;
 
+/**  
+ * @author Gordan Kreković
+ * @version 1.0.0
+ */
 public class Synth {
-	
 	JVstHost2 vst;
 	
 	public Synth(JVstHost2 vst) {
 		this.vst = vst;
 	}
 	
+	/**
+	 * Synthesizes <i>n</i> audio samples for the <i>candidate</i> patch. All <i>n</i>
+	 * samples represent the part of the signal when the note is pressed.
+	 * 
+	 * @param candidate
+	 * @param n - the total number of synthesized samples
+	 * @return
+	 * @throws Exception
+	 */
 	public float[] synthesize(Patch candidate, int n) throws Exception {
 		return synthesize(candidate, n, n);
 	}
+	
+	/**
+	 * Synthesizes <i>n</i> audio samples for the <i>candidate</i> patch. The first
+	 * <i>m</i> samples represent the part of the signal when the note is pressed. After
+	 * that period, the note is released, so the sound generally decays.
+	 * 
+	 * @param candidate
+	 * @param n - the total number of synthesized samples
+	 * @param m - the number of samples when the note is pressed
+	 * @return
+	 * @throws Exception
+	 */
+	public float[] synthesize(Patch candidate, int n, int m) throws NumberFormatException {
+		if (m > n) throw new IllegalArgumentException("The total number n should be greater or equal than the number m.");
 		
-	public float[] synthesize(Patch candidate, int n, int m) throws Exception {
+		// Set parameters to the VST synth
 		ArrayList<Float> parameters = candidate.getParameters();
 		int counter=0;
 		for (float p : parameters) {
 			vst.setParameter(counter++, p);
 		}
 		
+		// Prepare arrays and limits
 		int blockSize = vst.getBlockSize();
-		
-		float[][] signalInput = new float[2][blockSize];
-		float[][] signalOutput = new float[2][blockSize];
-		
-		float [] signal = new float[n];
-
 		int totalNumberOfBlocks = n/blockSize;
 		int noteNumberOfBlocks = m/blockSize;
+		float[] signal = new float[n];
+		
+		// These two arrays are used for the processReplacing method
+		float[][] signalInput = new float[2][blockSize];
+		float[][] signalOutput = new float[2][blockSize];
+
+		// Queue the note
 		int noteNumber = 50;
 		queueNote(noteNumber, ShortMessage.NOTE_ON);
 		boolean noteOn = true;
+		
+		// This will be used for normalization
 		float maxSignal = 0;
 
-		for (int i=0; i<totalNumberOfBlocks; ++i) {
+		// Process block by block
+		for (int i=0; i<totalNumberOfBlocks; ++i) {	
 			
+			// TODO: Is there a better way to clean the array?
 			for (int j=0; j<blockSize; ++j) {
 				signalInput[0][j] = 0;
 				signalOutput[0][j] = 0;
 				signalInput[1][j] = 0;
 				signalOutput[1][j] = 0;	
 			}
-			
 			vst.processReplacing(signalInput, signalOutput, blockSize);
 			
+			// Note off if the first m samples are finished
 			if (noteOn && (i >= noteNumberOfBlocks)) {
 				noteOn = false;
 				queueNote(noteNumber, ShortMessage.NOTE_OFF);
@@ -63,7 +95,7 @@ public class Synth {
 				int k = i*blockSize+j;
 				signal[k] = signalOutput[0][j]+signalOutput[1][j];
 				if (Float.isNaN(signal[k])) {
-					throw new Exception("NaN value occurred among samples. Index: " + k);
+					throw new NumberFormatException("NaN value occurred among samples. Index: " + k);
 				}
 				if (Math.abs(signal[k]) > maxSignal) maxSignal = Math.abs(signal[k]);
 			}
@@ -87,6 +119,13 @@ public class Synth {
 		vst.queueMidiMessage(midiMessage);
 	}
 	
+	/**
+	 * Synthesized the audio signal and saves it in a wav file. The total duration of the audio
+	 * is 3 seconds, whilst the note is pressed for the first 2 seconds.
+	 * 
+	 * @param candidate
+	 * @param fileName
+	 */
 	public void preview(Patch candidate, String fileName) {
 		int n = 132300;
 		int m = 88200;
@@ -102,12 +141,18 @@ public class Synth {
 		saveToFile(signal, fileName);	
 	}
 
+	/**
+	 * Synthesized the audio signal and saves it as temp.wav. The total duration of the audio
+	 * is 3 seconds, whilst the note is pressed for the first 2 seconds.
+	 * 
+	 * @param candidate
+	 * @param fileName
+	 */
 	public void preview(Patch candidate) {
 		preview(candidate, "temp.wav");
 	}
 	
 	private void saveToFile(float[] signal, String fileName) {
-		
 		short myFormat = 1;
 		short myChannels = 1;
 		short myBitsPerSample = 16;
@@ -170,8 +215,6 @@ public class Synth {
 			bytes[i++] = (byte) ((nSample >> 8) & 0xFF);
 			
 		}
-			
 		return bytes;
-		
 	}
 }

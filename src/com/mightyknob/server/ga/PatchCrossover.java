@@ -7,6 +7,10 @@ import java.util.Random;
 import org.uncommons.maths.number.NumberGenerator;
 import org.uncommons.watchmaker.framework.operators.AbstractCrossover;
 
+/**  
+ * @author Gordan Kreković
+ * @version 1.0.0
+ */
 public class PatchCrossover extends AbstractCrossover<Patch> {
 
     /**
@@ -39,7 +43,8 @@ public class PatchCrossover extends AbstractCrossover<Patch> {
 	
     
     /**
-     * Applies cross-over to a pair of parents.  
+     * Applies cross-over to a pair of parents.
+     *  
      * @param parent1 The first parent.
      * @param parent2 The second parent.
      * @param numberOfPoints The number of cross-overs to perform.

@@ -10,6 +10,10 @@ import com.mightyknob.server.audio.StandardFeatureVector;
 import com.mightyknob.server.audio.Synth;
 import com.synthbot.audioplugin.vst.vst2.JVstHost2;
 
+/**  
+ * @author Gordan Kreković
+ * @version 1.0.0
+ */
 public class PatchEvaluator implements FitnessEvaluator<Patch> {
 
 	final static double MAX_DISTANCE = 1;

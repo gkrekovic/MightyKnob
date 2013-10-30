@@ -1,5 +1,9 @@
 package com.mightyknob.server.audio;
 
+/**  
+ * @author Gordan Kreković
+ * @version 1.0.0
+ */
 public class StandardFeatureVector extends AbstractFeatureVector {
 	double sampleRate;
 	

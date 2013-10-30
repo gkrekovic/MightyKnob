@@ -2,6 +2,10 @@ package com.mightyknob.server.ga;
 
 import java.util.ArrayList;
 
+/**  
+ * @author Gordan Kreković
+ * @version 1.0.0
+ */
 public class Patch {
 	private ArrayList<Float> parameters;
 	public String name;

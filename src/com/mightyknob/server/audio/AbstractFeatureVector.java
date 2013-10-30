@@ -1,5 +1,9 @@
 package com.mightyknob.server.audio;
 
+/**   
+ * @author Gordan Kreković
+ * @version 1.0.0
+ */
 public abstract class AbstractFeatureVector {
 	final int NUMBER_OF_FEATURES = 6;
 

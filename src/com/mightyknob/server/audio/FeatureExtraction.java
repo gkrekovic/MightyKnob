@@ -2,13 +2,16 @@ package com.mightyknob.server.audio;
 
 import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
 
+/**  
+ * @author Gordan Kreković
+ * @version 1.0.0
+ */
 public class FeatureExtraction {
-	
 	int blockSize;
 	int stepSize;
 	float sampleRate;
 	boolean extractAll;
-	StandardFeatureVector targetVector;
+	NormalizedFeatureVector targetVector;
 	
 	public FeatureExtraction(int blockSize, int stepSize, float sampleRate) {
 		this.blockSize = blockSize;
@@ -17,8 +20,7 @@ public class FeatureExtraction {
 		extractAll = true;
 	}
 	
-	
-	public FeatureExtraction(int blockSize, int stepSize, float sampleRate, StandardFeatureVector targetVector) {
+	public FeatureExtraction(int blockSize, int stepSize, float sampleRate, NormalizedFeatureVector targetVector) {
 		this.blockSize = blockSize;
 		this.stepSize = stepSize;
 		this.sampleRate = sampleRate;
@@ -26,13 +28,13 @@ public class FeatureExtraction {
 		extractAll = false;
 	}
 	
+	// TODO: Instead of having two constructors, consider having two extractFeatures methods.
+	
 	/**
 	 * @param signal - samples of the audio signal ranging from -1 to 1
 	 * @return Values of audio features extracted from the signal.
 	 */
-	public StandardFeatureVector extractFeatures(float signal[]) {
-		// int numberOfBlocks = (signal.length-blockSize)/stepSize+1;
-		
+	public StandardFeatureVector extractFeatures(float signal[]) {	
 		// For spectral-based features ending zeros in the signal are ignored. For that reason
 		// we need to calculate effective length of the signal and the number of blocks.
 		int effectiveLength = lastIndexBeforeZeros(signal);
@@ -164,7 +166,6 @@ public class FeatureExtraction {
 			} else {
 				flatness[i] = gmean / mean;
 			}
-			// if (mean == 0) System.out.println("i = " + i + " numberOfBlocks = " + numberOfBlocks);
 		}
 		return flatness;
 	}

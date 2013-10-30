@@ -6,8 +6,12 @@ import java.util.Random;
 
 import org.uncommons.watchmaker.framework.EvolutionaryOperator;
 
-public class PatchMutation implements EvolutionaryOperator<Patch> {
 
+/**  
+ * @author Gordan Kreković
+ * @version 1.0.0
+ */
+public class PatchMutation implements EvolutionaryOperator<Patch> {
 	float probability;
 	float maxChange;
 	

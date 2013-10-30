@@ -6,6 +6,10 @@ import org.uncommons.watchmaker.framework.factories.AbstractCandidateFactory;
 
 import com.synthbot.audioplugin.vst.vst2.JVstHost2;
 
+/**  
+ * @author Gordan Kreković
+ * @version 1.0.0
+ */
 public class PatchFactory extends AbstractCandidateFactory<Patch>{
 
 	int n;
@@ -26,6 +30,12 @@ public class PatchFactory extends AbstractCandidateFactory<Patch>{
 		return new Patch(parameters, "random");
 	}
 	
+	/**
+	 * Generates a set of seed candidates which are equal to existing presets in the VST synth.
+	 * 
+	 * @param populationSize - the maximal number of seed candidates which should be generated
+	 * @return
+	 */
 	public ArrayList<Patch> generateSeedCandidates(int populationSize) {
 		ArrayList<Patch> seedCandidates = new ArrayList<Patch>();
 		int numPrograms = vst.numPrograms();
@@ -43,6 +53,11 @@ public class PatchFactory extends AbstractCandidateFactory<Patch>{
 		return seedCandidates;
 	}
 
+	/**
+	 * Generates seed candidates which are equal to existing presets in the VST synth.
+	 *
+	 * @return
+	 */
 	public ArrayList<Patch> generateSeedCandidates() {
 		return generateSeedCandidates(vst.numParameters());
 	}
