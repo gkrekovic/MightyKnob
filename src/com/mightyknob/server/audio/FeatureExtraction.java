@@ -1,7 +1,5 @@
 package com.mightyknob.server.audio;
 
-import java.util.ArrayList;
-
 import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
 
 public class FeatureExtraction {
@@ -10,7 +8,7 @@ public class FeatureExtraction {
 	int stepSize;
 	float sampleRate;
 	boolean extractAll;
-	FeatureVector targetVector;
+	StandardFeatureVector targetVector;
 	
 	public FeatureExtraction(int blockSize, int stepSize, float sampleRate) {
 		this.blockSize = blockSize;
@@ -20,7 +18,7 @@ public class FeatureExtraction {
 	}
 	
 	
-	public FeatureExtraction(int blockSize, int stepSize, float sampleRate, FeatureVector targetVector) {
+	public FeatureExtraction(int blockSize, int stepSize, float sampleRate, StandardFeatureVector targetVector) {
 		this.blockSize = blockSize;
 		this.stepSize = stepSize;
 		this.sampleRate = sampleRate;
@@ -32,8 +30,8 @@ public class FeatureExtraction {
 	 * @param signal - samples of the audio signal ranging from -1 to 1
 	 * @return Values of audio features extracted from the signal.
 	 */
-	public FeatureVector extractFeatures(float signal[]) {
-		int numberOfBlocks = (signal.length-blockSize)/stepSize+1;
+	public StandardFeatureVector extractFeatures(float signal[]) {
+		// int numberOfBlocks = (signal.length-blockSize)/stepSize+1;
 		
 		// For spectral-based features ending zeros in the signal are ignored. For that reason
 		// we need to calculate effective length of the signal and the number of blocks.
@@ -50,7 +48,7 @@ public class FeatureExtraction {
 		flux = spectralFlux(spectrum);
 		flatness = spectralFlatness(spectrum);
 		
-		FeatureVector vector = new FeatureVector(sampleRate);
+		StandardFeatureVector vector = new StandardFeatureVector(sampleRate);
 		
 		if (extractAll || targetVector.centroidMean != -1)
 			vector.setCentroidMean(calcMean(centroid));

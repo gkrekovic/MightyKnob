@@ -1,7 +1,6 @@
 package com.mightyknob.server.ga;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -47,7 +46,6 @@ public class PatchCrossover extends AbstractCrossover<Patch> {
      * @param rng The RNG used to select the cross-over points.
      * @return A list containing a pair of offspring.
      */
-	@SuppressWarnings("unchecked")
 	@Override
 	protected List<Patch> mate(Patch parent1, Patch parent2, int numberOfPoints, Random rng) {
         int n = parent1.getSize(); 

@@ -1,31 +1,35 @@
 package com.mightyknob.server;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Properties;
 
-import com.mightyknob.server.audio.FeatureVector;
+import com.mightyknob.server.audio.NormalizedFeatureVector;
 
 import net.sourceforge.jFuzzyLogic.FIS;
 
+/**
+ * Expert system implemented using jFuzzyLogic.
+ * @author Gordan Kreković
+ */
 public class ExpertSystem {
 
 	FIS fis;
-	double sampleRate;
-	
-	public ExpertSystem(Properties properties) throws IOException {
-		String folder = properties.getProperty("fcl_folder");
-		String fileName = properties.getProperty("fcl_name");
-		sampleRate = Double.parseDouble(properties.getProperty("sample_rate"));
-		fis = FIS.load(folder + fileName);
+
+	public ExpertSystem(String fileName) throws IOException {
+		fis = FIS.load(fileName);
 		
 		if (fis == null) {
 			throw new IOException("Cannot load file: '" + fileName + "'");
 		}
 	}
 	
-	public FeatureVector evaluate() {
-		FeatureVector vector = new FeatureVector(sampleRate);
+	/**
+	 * Evaluates the fuzzy model based on input timbral attributes and returns a vector
+	 * of normalized audio features.
+	 * 
+	 * @return 	Vector of normalized audio features.
+	 */
+	public NormalizedFeatureVector evaluate() {
+		NormalizedFeatureVector vector = new NormalizedFeatureVector();
 		
 		fis.setVariable("brightness", 0.9);
 		fis.evaluate();

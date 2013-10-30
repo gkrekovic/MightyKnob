@@ -137,7 +137,8 @@ public class Synth {
             outFile.write(shortToByteArray((short) myBitsPerSample), 0, 2); // 34 - how many bits in a sample(number)?  usually 16 or 24
             outFile.writeBytes("data");                 // 36 - data
             outFile.write(intToByteArray((int) myDataSize), 0, 4);      // 40 - how big is this data chunk
-            outFile.write(myData);                      // 44 - the actual data itself - just a long string of numbers			
+            outFile.write(myData);                      // 44 - the actual data itself - just a long string of numbers
+            outFile.close();
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

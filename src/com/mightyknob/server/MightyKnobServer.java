@@ -4,13 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Properties;
 
-import com.mightyknob.server.audio.FeatureVector;
 import com.mightyknob.server.ga.GeneticAlgorithm;
 import com.mightyknob.server.tools.PresetAnalyzer;
-import com.synthbot.audioio.vst.JVstAudioThread;
+// import com.synthbot.audioio.vst.JVstAudioThread;
 import com.synthbot.audioplugin.vst.JVstLoadException;
 import com.synthbot.audioplugin.vst.vst2.JVstHost2;
 
@@ -27,11 +25,14 @@ public class MightyKnobServer {
 		Properties properties = new Properties();
 		FileInputStream fis = new FileInputStream("properties"); 
 		properties.load(fis);
-		
+
 		initVst(properties);
 		
 		GeneticAlgorithm ga = new GeneticAlgorithm(properties, vst);
-		ExpertSystem es = new ExpertSystem(properties);
+		
+		String fclFolder = properties.getProperty("fcl_folder");
+		String fclFileName = properties.getProperty("fcl_name");
+		ExpertSystem es = new ExpertSystem(fclFolder + fclFileName);
 		
 		try {
 			ga.evolvePatch(es.evaluate());
@@ -46,16 +47,13 @@ public class MightyKnobServer {
 	}
 	
     private static void initVst(Properties properties) {
-    	JVstAudioThread audioThread;
     	vst = null;
-    	
 		String vstFolder = properties.getProperty("vst_folder");
 		String vstName = properties.getProperty("vst_name");
 		File vstFile = new File(vstFolder+vstName);
 		
 		final float SAMPLE_RATE = Integer.parseInt(properties.getProperty("sample_rate"));
 		final int BLOCK_SIZE = Integer.parseInt(properties.getProperty("block_size"));
-		final String AUDIO_THREAD = "Audio Thread";
 				
 		try {
 			vst = JVstHost2.newInstance(vstFile, SAMPLE_RATE, BLOCK_SIZE);
@@ -66,7 +64,10 @@ public class MightyKnobServer {
 		}
 		
 		// start the audio thread
-	    /* audioThread = new JVstAudioThread(vst);
+	    /* 
+	    JVstAudioThread audioThread;
+	    final String AUDIO_THREAD = "Audio Thread";
+	    audioThread = new JVstAudioThread(vst);
 	    Thread thread = new Thread(audioThread);
 	    thread.setName(AUDIO_THREAD); // for easy debugging
 	    thread.setDaemon(true); // allows the JVM to exit normally

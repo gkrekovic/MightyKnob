@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import com.mightyknob.server.audio.FeatureExtraction;
-import com.mightyknob.server.audio.FeatureVector;
+import com.mightyknob.server.audio.NormalizedFeatureVector;
+import com.mightyknob.server.audio.StandardFeatureVector;
 import com.mightyknob.server.audio.Synth;
 import com.mightyknob.server.ga.Patch;
 import com.mightyknob.server.ga.PatchFactory;
@@ -20,7 +21,7 @@ public class PresetAnalyzer {
 		this.vst = vst;
 	}
 	
-	public void analyzePresets(FeatureVector targetVector) {
+	public void analyzePresets(NormalizedFeatureVector targetVector) {
 		int n = 132300;
 		int m = 88200;
 		int blockSize = vst.getBlockSize();
@@ -31,7 +32,6 @@ public class PresetAnalyzer {
 		PatchFactory factory = new PatchFactory(vst);
 		Collection<Patch> seedCandidates = new ArrayList<Patch>();
 		seedCandidates = factory.generateSeedCandidates();
-
 		
 		int i=0;
 		for(Patch preset:seedCandidates) {
@@ -43,13 +43,13 @@ public class PresetAnalyzer {
 			}
 
 			FeatureExtraction Extractor = new FeatureExtraction(blockSize, stepSize, sampleRate);
-			FeatureVector featureVector = Extractor.extractFeatures(signal);
+			StandardFeatureVector featureVector = Extractor.extractFeatures(signal);
 			double[] features = featureVector.getNormalizedFeatures();
 			
 			for (double feature : features) {
 				System.out.print(feature + ", ");
 			}
-			System.out.print("distance: " + distance(targetVector, featureVector));
+			System.out.print("distance: " + distance(featureVector, targetVector));
 			System.out.println("preset" + i);
 
 			int blabla = i+16;
@@ -57,7 +57,7 @@ public class PresetAnalyzer {
 			i++;
 		}
 		
-		double[] features = targetVector.getNormalizedFeatures();
+		double[] features = targetVector.getFeatures();
 		
 		for (double feature : features) {
 			System.out.print(feature + ", ");
@@ -66,20 +66,18 @@ public class PresetAnalyzer {
 		
 	}
 	
-	private double distance(FeatureVector candidateVector, FeatureVector targetVector)  {
+	private double distance(StandardFeatureVector candidateVector, NormalizedFeatureVector targetVector)  {
 		int vectorSize = candidateVector.getSize();
 		if (vectorSize != targetVector.getSize()) return MAX_DISTANCE;
 		double d = 0;
 		
 		double[] candidateFeatures = candidateVector.getNormalizedFeatures();
-		double[] targetFeatures = targetVector.getNormalizedFeatures();
+		double[] targetFeatures = targetVector.getFeatures();
 		for (int i = 0; i < vectorSize; ++i) {
 			d += Math.abs(candidateFeatures[i] - targetFeatures[i]);
 		}
 		
 		if (Double.isNaN(d)) {
-			/* for (int i = 0; i < vectorSize; ++i) System.out.print(candidateFeatures[i]+ " ");
-			System.out.println("Opet opet"); */
 			return MAX_DISTANCE;
 		} else {
 			return d/vectorSize;

@@ -5,7 +5,8 @@ import java.util.List;
 import org.uncommons.watchmaker.framework.FitnessEvaluator;
 
 import com.mightyknob.server.audio.FeatureExtraction;
-import com.mightyknob.server.audio.FeatureVector;
+import com.mightyknob.server.audio.NormalizedFeatureVector;
+import com.mightyknob.server.audio.StandardFeatureVector;
 import com.mightyknob.server.audio.Synth;
 import com.synthbot.audioplugin.vst.vst2.JVstHost2;
 
@@ -13,9 +14,9 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 
 	final static double MAX_DISTANCE = 1;
 	private JVstHost2 vst;
-	FeatureVector targetVector;
+	NormalizedFeatureVector targetVector;
 	
-	public PatchEvaluator(JVstHost2 vst, FeatureVector targetVector) {
+	public PatchEvaluator(JVstHost2 vst, NormalizedFeatureVector targetVector) {
 		this.vst = vst;
 		this.targetVector = targetVector;
 	}
@@ -40,14 +41,14 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 		}
 			
 		FeatureExtraction Extractor = new FeatureExtraction(blockSize, stepSize, sampleRate);
-		FeatureVector features = new FeatureVector(sampleRate);
+		StandardFeatureVector features = new StandardFeatureVector(sampleRate);
 		features = Extractor.extractFeatures(signal);
 		double fitness = distance(features);
 		
 		return fitness;
 	}
 
-	private double distance(FeatureVector candidateVector)  {
+	private double distance(StandardFeatureVector candidateVector)  {
 		int vectorSize = candidateVector.getSize();
 		if (vectorSize != targetVector.getSize()) return MAX_DISTANCE;
 		double d = 0;

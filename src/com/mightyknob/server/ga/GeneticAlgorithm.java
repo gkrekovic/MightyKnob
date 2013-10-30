@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
-import com.mightyknob.server.audio.FeatureVector;
+import com.mightyknob.server.audio.NormalizedFeatureVector;
 import com.mightyknob.server.audio.Synth;
 import com.synthbot.audioplugin.vst.vst2.JVstHost2;
 
@@ -31,7 +31,7 @@ public class GeneticAlgorithm {
 		eliteCount = Integer.parseInt(properties.getProperty("elite_count", "5"));		
 	}
 	
-	public void evolvePatch(FeatureVector targetVector) {
+	public void evolvePatch(NormalizedFeatureVector targetVector) {
 		PatchFactory factory = new PatchFactory(vst);
 		Collection<Patch> seedCandidates = new ArrayList<Patch>();
 		seedCandidates = factory.generateSeedCandidates(populationSize);

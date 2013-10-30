@@ -1,0 +1,51 @@
+package com.mightyknob.server.audio;
+
+public abstract class AbstractFeatureVector {
+	final int NUMBER_OF_FEATURES = 6;
+
+	double centroidMean = -1;
+	double centroidStddev = -1;
+	double fluxMean = -1;
+	double fluxStddev = -1;
+	double flatnessMean = -1;
+	double flatnessStddev = -1;
+	
+	public AbstractFeatureVector() {
+	}
+
+	public abstract void setCentroidMean(double x);
+	
+	public abstract void setCentroidStddev(double x);
+	
+	public abstract void setFluxMean(double x); 
+	
+	public abstract void setFluxStddev(double x);
+	
+	public abstract void setFlatnessMean(double x);
+	
+	public abstract void setFlatnessStddev(double x);
+	
+	public int getSize() {
+		return NUMBER_OF_FEATURES;
+	}
+	
+	public double[] getFeatures() {
+		double[] features = new double[NUMBER_OF_FEATURES];
+		features[0] = centroidMean;
+		features[1] = centroidStddev;
+		features[2] = fluxMean;
+		features[3] = fluxStddev;
+		features[4] = flatnessMean;
+		features[5] = flatnessStddev;
+		return features;
+	}
+	
+	public String toString() {
+		StringBuilder s = new StringBuilder();
+		double[] features = getFeatures();
+		for (double f : features) {
+			s.append(String.format("%8.4f ", f));
+		}
+		return s.toString();
+	}
+}
