@@ -1,7 +1,0 @@
-1. check all features by comparing with other frameworks for audio feature extraction
-2. add temporal features
-3. analyze presets and write model.fcl
-4. change distance function so that all features are normalized -- DONE
-5. try different tremination criteria for genetic algorithm
-6. consider using standard devation of features relatively to the mean, since the features are not linear to the human perception!
-	- use sigmas instead of std_dev?
