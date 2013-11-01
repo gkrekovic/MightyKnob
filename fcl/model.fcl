@@ -2,6 +2,7 @@ FUNCTION_BLOCK attributesToFeatures
 
 VAR_INPUT
 	brightness : REAL;
+	harsh : REAL;
 END_VAR
 
 VAR_OUTPUT
@@ -19,6 +20,12 @@ FUZZIFY brightness
 	TERM high := (0.5, 0) (1, 1);
 END_FUZZIFY
 
+FUZZIFY harsh
+	TERM low := (0, 1) (0.5, 0);
+	TERM medium := (0, 0) (0.5, 1) (1, 0);
+	TERM high := (0.5, 0) (1, 1);
+END_FUZZIFY
+
 DEFUZZIFY centroid_mean
 	TERM low := (0, 1) (0.5, 0);
 	TERM medium := (0, 0) (0.5, 1) (1, 0);
@@ -28,41 +35,41 @@ DEFUZZIFY centroid_mean
 END_DEFUZZIFY
 
 DEFUZZIFY centroid_stddev
-	TERM low := (100, 1) (1000, 0);
-	TERM medium := (500, 0) (1000, 1) (10000, 0);
-	TERM high := (1000, 0) (10000, 1);
+	TERM low := (0, 1) (0.5, 0);
+	TERM medium := (0, 0) (0.5, 1) (1, 0);
+	TERM high := (0.5, 0) (1, 1);
 	METHOD: COG;
 	DEFAULT := -1.00;
 END_DEFUZZIFY
 
 DEFUZZIFY flux_mean
-	TERM low := (100, 1) (1000, 0);
-	TERM medium := (500, 0) (1000, 1) (10000, 0);
-	TERM high := (1000, 0) (10000, 1);
+	TERM low := (0, 1) (0.5, 0);
+	TERM medium := (0, 0) (0.5, 1) (1, 0);
+	TERM high := (0.5, 0) (1, 1);
 	METHOD: COG;
 	DEFAULT := -1.00;
 END_DEFUZZIFY
 
 DEFUZZIFY flux_stddev
-	TERM low := (0, 1) (0.002, 0);
-	TERM medium := (0.001, 0) (0.01, 1) (0.1, 0);
-	TERM high := (0.01, 0) (1, 1);
+	TERM low := (0, 1) (0.5, 0);
+	TERM medium := (0, 0) (0.5, 1) (1, 0);
+	TERM high := (0.5, 0) (1, 1);
 	METHOD: COG;
 	DEFAULT := -1.00;
 END_DEFUZZIFY
 
 DEFUZZIFY flatness_mean
-	TERM low := (0, 1) (0.002, 0);
-	TERM medium := (0.001, 0) (0.01, 1) (0.1, 0);
-	TERM high := (0.01, 0) (1, 1);
+	TERM low := (0, 1) (0.5, 0);
+	TERM medium := (0, 0) (0.5, 1) (1, 0);
+	TERM high := (0.5, 0) (1, 1);
 	METHOD: COG;
 	DEFAULT := -1.00;
 END_DEFUZZIFY
 
 DEFUZZIFY flatness_stddev
-	TERM low := (0, 1) (0.002, 0);
-	TERM medium := (0.001, 0) (0.01, 1) (0.1, 0);
-	TERM high := (0.01, 0) (1, 1);
+	TERM low := (0, 1) (0.5, 0);
+	TERM medium := (0, 0) (0.5, 1) (1, 0);
+	TERM high := (0.5, 0) (1, 1);
 	METHOD: COG;
 	DEFAULT := -1.00;
 END_DEFUZZIFY
@@ -76,6 +83,13 @@ RULEBLOCK rules
 	RULE 1: IF brightness IS low THEN centroid_mean IS low;
  	RULE 2: IF brightness IS medium THEN centroid_mean IS medium;
 	RULE 3: IF brightness IS high THEN centroid_mean IS high;
+	
+	RULE 4: IF harsh IS low THEN flux_mean IS low;
+ 	RULE 5: IF harsh IS medium THEN flux_mean IS medium;
+	RULE 6: IF harsh IS high THEN flux_mean IS high;
+	
+	RULE 7: IF harsh IS low THEN flatness_mean IS medium;
+	
 END_RULEBLOCK
 
 END_FUNCTION_BLOCK

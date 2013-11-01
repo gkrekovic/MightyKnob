@@ -44,7 +44,7 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 			return MAX_DISTANCE;
 		}
 			
-		FeatureExtraction Extractor = new FeatureExtraction(blockSize, stepSize, sampleRate);
+		FeatureExtraction Extractor = new FeatureExtraction(blockSize, stepSize, sampleRate, targetVector);
 		StandardFeatureVector features = new StandardFeatureVector(sampleRate);
 		features = Extractor.extractFeatures(signal);
 		double fitness = distance(features);

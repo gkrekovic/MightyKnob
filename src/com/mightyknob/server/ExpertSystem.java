@@ -31,7 +31,9 @@ public class ExpertSystem {
 	public NormalizedFeatureVector evaluate() {
 		NormalizedFeatureVector vector = new NormalizedFeatureVector();
 		
-		fis.setVariable("brightness", 0.9);
+		fis.setVariable("brightness", 0.8);
+		fis.setVariable("harsh", 0.2);
+		
 		fis.evaluate();
 		vector.setCentroidMean(fis.getVariable("centroid_mean").getValue());
 		vector.setCentroidStddev(fis.getVariable("centroid_stddev").getValue());

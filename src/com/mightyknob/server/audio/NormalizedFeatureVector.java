@@ -8,15 +8,17 @@ public class NormalizedFeatureVector extends AbstractFeatureVector {
 
 	@Override
 	public void setCentroidMean(double x) {
-		if (x < 0 || x > 1)
-			throw new NumberFormatException("Normalized centroid mean must be between 0 and 1.");
+		if ((x != -1) && (x < 0 || x > 1))
+			throw new NumberFormatException("Normalized centroid mean must be between 0 and 1."
+					+ "The excpetion occurred, because the value was:" + x);
 		centroidMean = (Double.isNaN(x)) ? -1 : x;
 	}
 
 	@Override
 	public void setCentroidStddev(double x) {
-		if (x < 0 || x > 1)
-			throw new NumberFormatException("Normalized centroid standard deviation must be between 0 and 1.");
+		if ((x != -1) && (x < 0 || x > 1))
+			throw new NumberFormatException("Normalized centroid standard deviation must be between 0 and 1."
+					+ "The excpetion occurred because the value was: " + x);
 		centroidStddev = (Double.isNaN(x)) ? -1 : x;
 	}
 

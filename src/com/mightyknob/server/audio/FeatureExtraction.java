@@ -27,12 +27,15 @@ public class FeatureExtraction {
 		this.targetVector = targetVector;
 		extractAll = false;
 	}
-	
-	// TODO: Instead of having two constructors, consider having two extractFeatures methods.
-	
+
 	/**
+	 * Calculates audio features.
+	 * <p>
+	 * If the target vector is given in a constructor call, only features which does not have the value -1 in the target vector
+	 * will be calculated here. The calculated features are not normalized.
+	 * 
 	 * @param signal - samples of the audio signal ranging from -1 to 1
-	 * @return Values of audio features extracted from the signal.
+	 * @return A vector of calculated audio features.
 	 */
 	public StandardFeatureVector extractFeatures(float signal[]) {	
 		// For spectral-based features ending zeros in the signal are ignored. For that reason
@@ -44,41 +47,42 @@ public class FeatureExtraction {
 		double[] centroid = new double[effectiveNumberOfBlocks];
 		double[] flux = new double[effectiveNumberOfBlocks];
 		double[] flatness = new double[effectiveNumberOfBlocks];
-		
-		spectrum = powerSpectrum(signal, effectiveLength);
-		centroid = spectralCentroid(spectrum);
-		flux = spectralFlux(spectrum);
-		flatness = spectralFlatness(spectrum);
-		
 		StandardFeatureVector vector = new StandardFeatureVector(sampleRate);
 		
-		if (extractAll || targetVector.centroidMean != -1)
-			vector.setCentroidMean(calcMean(centroid));
-			
-		if (extractAll || targetVector.centroidStddev != -1)
-			vector.setCentroidStddev(calcStdDev(centroid));
+		spectrum = powerSpectrum(signal, effectiveLength);
 		
-		if (extractAll || targetVector.fluxMean != -1)
-			vector.setFluxMean(calcMean(flux));
-		
-		if (extractAll || targetVector.fluxStddev != -1)
-			vector.setFluxStddev(calcStdDev(flux));
-		
-		if (extractAll || targetVector.flatnessMean != -1)
-			vector.setFlatnessMean(calcMean(flatness));
-		
-		if (extractAll || targetVector.flatnessStddev != -1)
-			vector.setFlatnessStddev(calcStdDev(flatness));
-		
+		// Calculate spectral centroid and its statistical features
+		if (extractAll || targetVector.centroidMean >= 0 || targetVector.centroidStddev >= 0) {
+			centroid = spectralCentroid(spectrum);
+			if (extractAll || targetVector.centroidMean >= 0) vector.setCentroidMean(calcMean(centroid));
+			if (extractAll || targetVector.centroidStddev >= 0) vector.setCentroidStddev(calcStdDev(centroid));
+		}
+
+		// Calculate spectral flux and its statistical features
+		if (extractAll || targetVector.fluxMean >= 0 || targetVector.fluxStddev >= 0) {
+			flux = spectralFlux(spectrum);
+			if (extractAll || targetVector.fluxMean >= 0)	vector.setFluxMean(calcMean(flux));
+			if (extractAll || targetVector.fluxStddev >= 0) vector.setFluxStddev(calcStdDev(flux));
+		}
+
+		// Calculate spectral flatness and ist statistical features	
+		if (extractAll || targetVector.fluxMean >= 0 || targetVector.fluxStddev >= 0) {
+			flatness = spectralFlatness(spectrum);
+			if (extractAll || targetVector.flatnessMean >= 0) vector.setFlatnessMean(calcMean(flatness));
+			if (extractAll || targetVector.flatnessStddev >= 0) vector.setFlatnessStddev(calcStdDev(flatness));
+		}
+											
 		return vector;
 	}
-	
+
+	/** Determine which is the last non-zero sample in the signal */
 	private int lastIndexBeforeZeros(float signal[]) {
 		int n = signal.length-1;
 		while (signal[n] < 0.08 && n>0) n--;
 		return n+1;
 	}
-	
+
+	/** Calculate power spectrum which is necessary for calculating spetrcal-based features */
 	private double[][] powerSpectrum(float signal[], int effectiveLength) {
 		int numberOfBlocks = (effectiveLength-blockSize)/stepSize+1;
 		
@@ -102,7 +106,8 @@ public class FeatureExtraction {
 		}
 		return spectrum;
 	}
-	
+
+	/** Calculate spectral centroid for all blocks of an audio signal */
 	private double[] spectralCentroid(double spectrum[][]) {
 		int numberOfBlocks = spectrum.length;
 		double total = 0;
@@ -125,7 +130,8 @@ public class FeatureExtraction {
 		}
 		return centroid;
 	}
-	
+
+	/** Calculate spectral flux for all blocks of an audio signal */
 	private double[] spectralFlux(double spectrum[][]) {
 		int numberOfBlocks = spectrum.length;
 		double[] flux = new double[numberOfBlocks];
@@ -149,12 +155,13 @@ public class FeatureExtraction {
 				difference = (spectrum[i][j]/maxSpec2) - (spectrum[i-1][j]/maxSpec1);
 				sum += (difference*difference);
 			}
-			flux[i] = sum;
+			flux[i] = Math.sqrt(sum);
 		}
 		
 		return flux;
 	}
 	
+	/** Calculate spectral flatness for all blocks of an audio signal */
 	private double[] spectralFlatness(double spectrum[][]) {
 		int numberOfBlocks = spectrum.length;
 		double[] flatness = new double[numberOfBlocks];
@@ -170,6 +177,7 @@ public class FeatureExtraction {
 		return flatness;
 	}
 	
+	/** Calculate arithmetic mean */
 	private double calcMean(double[] array) {
 		double sum = 0;
 		for (double a : array) {
@@ -178,6 +186,7 @@ public class FeatureExtraction {
 		return sum/array.length;
 	}
 	
+	/** Calculate geometric mean */
 	private double calcGMean(double[] array)  {
 		double sum = 0;
 		int n = array.length;
@@ -187,6 +196,7 @@ public class FeatureExtraction {
 		return Math.exp(sum/n);
 	}
 	
+	/** Calculate variance */
 	private double calcVariance(double[] array) {
 		double mean = calcMean(array);
 		double temp = 0;
@@ -196,6 +206,7 @@ public class FeatureExtraction {
 		return temp/array.length;
 	}
 	
+	/** Calculate standard deviation */
 	private double calcStdDev(double[] array) {
 		return Math.sqrt(calcVariance(array));
 	}

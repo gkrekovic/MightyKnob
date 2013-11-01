@@ -48,12 +48,27 @@ public class StandardFeatureVector extends AbstractFeatureVector {
 	public double[] getNormalizedFeatures() {
 		double k = 5;
 		NormalizedFeatureVector normalizedVector = new NormalizedFeatureVector();
-		normalizedVector.setCentroidMean(Math.log((centroidMean/sampleRate)*(Math.exp(k)-1)+1)/k);
-		normalizedVector.setCentroidStddev(Math.log((centroidStddev/sampleRate)*(Math.exp(k)-1)+1)/k);
-		normalizedVector.setFluxMean(fluxMean);
-		normalizedVector.setFluxStddev(fluxStddev);
-		normalizedVector.setFlatnessMean(flatnessMean);  // 10*Math.log10(flatnessMean);
-		normalizedVector.setFlatnessStddev(flatnessStddev);	
+		
+		if (centroidMean != -1)
+			normalizedVector.setCentroidMean(Math.log((2*centroidMean/sampleRate)*(Math.exp(k)-1)+1)/k);
+		
+		if (centroidStddev != -1) {
+			normalizedVector.setCentroidStddev(Math.min(1, centroidStddev/centroidMean));
+		}
+			
+		if (fluxMean != -1)
+			normalizedVector.setFluxMean(Math.min(1, fluxMean));
+		
+		if (fluxStddev != -1)
+			normalizedVector.setFluxStddev(Math.min(1, fluxStddev/fluxMean));
+		
+		k = 7;
+		if (flatnessMean != -1)
+			normalizedVector.setFlatnessMean(Math.log(flatnessMean*(Math.exp(k)-1)+1)/k);
+		
+		if (flatnessStddev != -1)
+			normalizedVector.setFlatnessStddev(Math.min(1, flatnessStddev/flatnessMean));	
+		
 		return normalizedVector.getFeatures();
 	}
 }

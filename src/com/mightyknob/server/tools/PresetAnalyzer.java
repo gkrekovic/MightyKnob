@@ -45,18 +45,18 @@ public class PresetAnalyzer {
 				System.err.println("Exception: " + e.getMessage());
 			}
 
-			FeatureExtraction Extractor = new FeatureExtraction(blockSize, stepSize, sampleRate);
+			FeatureExtraction Extractor = new FeatureExtraction(blockSize, stepSize, sampleRate, targetVector);
 			StandardFeatureVector featureVector = Extractor.extractFeatures(signal);
-			double[] features = featureVector.getNormalizedFeatures();
+			double[] normalizedFeatures = featureVector.getNormalizedFeatures();
+			double[] features = featureVector.getFeatures();
 			
-			for (double feature : features) {
-				System.out.print(feature + ", ");
+			for (int j = 0; j < featureVector.getSize(); ++j) {
+				if (features[j] != -1) System.out.print(features[j] + ", " + normalizedFeatures[j] + ", ");
 			}
 			System.out.print("distance: " + distance(featureVector, targetVector));
 			System.out.println("preset" + i);
 
-			int blabla = i+16;
-			new Synth(vst).preview(preset, "preset" + blabla +".wav");
+			new Synth(vst).preview(preset, "preset" + i +".wav");
 			i++;
 		}
 		
