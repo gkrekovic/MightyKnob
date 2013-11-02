@@ -1,6 +1,7 @@
 package com.mightyknob.server.audio;
 
 import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
+import edu.emory.mathcs.jtransforms.fft.FloatFFT_1D;
 
 /**  
  * @author Gordan Kreković
@@ -82,7 +83,7 @@ public class FeatureExtraction {
 		return n+1;
 	}
 
-	/** Calculate power spectrum which is necessary for calculating spetrcal-based features */
+	/** Calculate the power spectrum which is necessary for calculating spetrcal-based features */
 	private double[][] powerSpectrum(float signal[], int effectiveLength) {
 		int numberOfBlocks = (effectiveLength-blockSize)/stepSize+1;
 		
@@ -107,7 +108,7 @@ public class FeatureExtraction {
 		return spectrum;
 	}
 
-	/** Calculate spectral centroid for all blocks of an audio signal */
+	/** Calculate the spectral centroid for all blocks of an audio signal */
 	private double[] spectralCentroid(double spectrum[][]) {
 		int numberOfBlocks = spectrum.length;
 		double total = 0;
@@ -131,7 +132,7 @@ public class FeatureExtraction {
 		return centroid;
 	}
 
-	/** Calculate spectral flux for all blocks of an audio signal */
+	/** Calculate the spectral flux for all blocks of an audio signal */
 	private double[] spectralFlux(double spectrum[][]) {
 		int numberOfBlocks = spectrum.length;
 		double[] flux = new double[numberOfBlocks];
@@ -161,7 +162,7 @@ public class FeatureExtraction {
 		return flux;
 	}
 	
-	/** Calculate spectral flatness for all blocks of an audio signal */
+	/** Calculate the spectral flatness for all blocks of an audio signal */
 	private double[] spectralFlatness(double spectrum[][]) {
 		int numberOfBlocks = spectrum.length;
 		double[] flatness = new double[numberOfBlocks];
@@ -175,6 +176,39 @@ public class FeatureExtraction {
 			}
 		}
 		return flatness;
+	}
+	
+	/** Calculate the amplitude envelope by convolving the audio signal with the Gaussian window.
+	 *  Amplitude envelope is necessary for calculating temporal features.
+	 */
+	private double[] amplitudeEnvelope(float signal[]) {
+		int n = signal.length;
+		
+		// Generate the Gaussian window in the time domain
+		double sigma = 0.2; // sigma must be <= 0.5
+		double[] window = new double[n];
+		for (int i = 0; i < n; ++i) {
+			double innerTerm = (i-(n-1)/2)/(sigma*(n-1)/2);
+			window[i] = Math.exp(-0.5*innerTerm*innerTerm);
+		}
+		
+		// Transform the window and the audio sginal to the frequency domain
+		DoubleFFT_1D FFTObjDouble = new DoubleFFT_1D(n);	
+		FFTObjDouble.realForward(window);
+		FloatFFT_1D FFTObjFloat = new FloatFFT_1D(n);	
+		FFTObjFloat.realForward(signal);
+		
+		// Multiplication in the frequency domain
+		double[] smoothed = new double[n];
+		for (int i = 0; i < n-1; i+=2) {
+			smoothed[i] = window[i]*signal[i]-window[i+1]*signal[i+1];
+			smoothed[i+1] = window[i]*signal[i+1]-window[i+1]*signal[i];
+		}
+		
+		// Transform back to the time domain
+		FFTObjDouble.realInverseFull(smoothed, true);
+		
+		return smoothed;
 	}
 	
 	/** Calculate arithmetic mean */

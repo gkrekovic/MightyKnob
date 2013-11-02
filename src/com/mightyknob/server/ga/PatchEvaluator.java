@@ -58,7 +58,7 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 		double d = 0;
 		
 		double[] candidateFeatures = candidateVector.getNormalizedFeatures();
-		double[] targetFeatures = targetVector.getFeatures(); // privremeni hack
+		double[] targetFeatures = targetVector.getFeatures();
 
 		int k = 0;
 		for (int i = 0; i < vectorSize; ++i) {
