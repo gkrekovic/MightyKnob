@@ -46,11 +46,28 @@ public class StandardFeatureVector extends AbstractFeatureVector {
 	public void setFlatnessStddev(double x) {
 		flatnessStddev = (Double.isNaN(x)) ? -1 : x;
 	}
+
+	@Override
+	public void setAttackTime(double x) {
+		attackTime = (Double.isNaN(x)) ? -1 : x;
+		
+	}
+
+	@Override
+	public void setSustainTime(double x) {
+		sustainTime = (Double.isNaN(x)) ? -1 : x;
+	}
+
+	@Override
+	public void setDecayTime(double x) {
+		decayTime = (Double.isNaN(x)) ? -1 : x;
+	}
 	
 	public double[] getNormalizedFeatures() {
-		double k = 5;
 		NormalizedFeatureVector normalizedVector = new NormalizedFeatureVector();
-		
+	
+		double k;
+		k = 5;
 		if (centroidMean != -1)
 			normalizedVector.setCentroidMean(Math.log((2*centroidMean/sampleRate)*(Math.exp(k)-1)+1)/k);
 		
@@ -70,6 +87,16 @@ public class StandardFeatureVector extends AbstractFeatureVector {
 		
 		if (flatnessStddev != -1)
 			normalizedVector.setFlatnessStddev(Math.min(1, flatnessStddev/flatnessMean));	
+		
+		k = 5;
+		if (attackTime != -1)
+			normalizedVector.setAttackTime(Math.log(attackTime*(Math.exp(k)-1)+1)/k);
+		
+		if (sustainTime != -1)
+			normalizedVector.setSustainTime(Math.log(sustainTime*(Math.exp(k)-1)+1)/k);
+		
+		if (decayTime != -1)
+			normalizedVector.setDecayTime(Math.log(decayTime*(Math.exp(k)-1)+1)/k);
 		
 		return normalizedVector.getFeatures();
 	}

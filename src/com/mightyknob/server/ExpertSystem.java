@@ -31,8 +31,9 @@ public class ExpertSystem {
 	public NormalizedFeatureVector evaluate() {
 		NormalizedFeatureVector vector = new NormalizedFeatureVector();
 		
-		fis.setVariable("brightness", 0.8);
-		fis.setVariable("harsh", 0.2);
+		fis.setVariable("brightness", 0.3);
+		fis.setVariable("harsh", 0.6);
+		fis.setVariable("plucked", 0.9);
 		
 		fis.evaluate();
 		vector.setCentroidMean(fis.getVariable("centroid_mean").getValue());
@@ -41,6 +42,9 @@ public class ExpertSystem {
 		vector.setFluxStddev(fis.getVariable("flux_stddev").getValue());
 		vector.setFlatnessMean(fis.getVariable("flatness_mean").getValue());
 		vector.setFlatnessStddev(fis.getVariable("flatness_stddev").getValue());
+		vector.setAttackTime(fis.getVariable("attack_time").getValue());
+		vector.setSustainTime(fis.getVariable("sustain_time").getValue());
+		vector.setDecayTime(fis.getVariable("decay_time").getValue());		
 		
 		System.out.println("Target vector: " + vector.toString());
 		

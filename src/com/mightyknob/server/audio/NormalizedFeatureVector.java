@@ -41,4 +41,20 @@ public class NormalizedFeatureVector extends AbstractFeatureVector {
 	public void setFlatnessStddev(double x) {
 		flatnessStddev = (Double.isNaN(x)) ? -1 : x;
 	}
+
+	@Override
+	public void setAttackTime(double x) {
+		attackTime = (Double.isNaN(x)) ? -1 : x;
+		
+	}
+
+	@Override
+	public void setSustainTime(double x) {
+		sustainTime = (Double.isNaN(x)) ? -1 : x;
+	}
+
+	@Override
+	public void setDecayTime(double x) {
+		decayTime = (Double.isNaN(x)) ? -1 : x;
+	}
 }

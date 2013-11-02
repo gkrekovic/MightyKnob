@@ -3,6 +3,7 @@ FUNCTION_BLOCK attributesToFeatures
 VAR_INPUT
 	brightness : REAL;
 	harsh : REAL;
+	plucked : REAL;
 END_VAR
 
 VAR_OUTPUT
@@ -12,6 +13,9 @@ VAR_OUTPUT
 	flux_stddev : REAL;
 	flatness_mean : REAL;
 	flatness_stddev : REAL;
+	attack_time : REAL;
+	sustain_time : REAL;
+	decay_time : REAL;
 END_VAR
 
 FUZZIFY brightness
@@ -21,6 +25,12 @@ FUZZIFY brightness
 END_FUZZIFY
 
 FUZZIFY harsh
+	TERM low := (0, 1) (0.5, 0);
+	TERM medium := (0, 0) (0.5, 1) (1, 0);
+	TERM high := (0.5, 0) (1, 1);
+END_FUZZIFY
+
+FUZZIFY plucked
 	TERM low := (0, 1) (0.5, 0);
 	TERM medium := (0, 0) (0.5, 1) (1, 0);
 	TERM high := (0.5, 0) (1, 1);
@@ -74,6 +84,29 @@ DEFUZZIFY flatness_stddev
 	DEFAULT := -1.00;
 END_DEFUZZIFY
 
+DEFUZZIFY attack_time
+	TERM short := (0, 1) (0.5, 0);
+	TERM medium := (0, 0) (0.5, 1) (1, 0);
+	TERM long := (0.5, 0) (1, 1);
+	METHOD: COG;
+	DEFAULT := -1.00;
+END_DEFUZZIFY
+
+DEFUZZIFY sustain_time
+	TERM short := (0, 1) (0.5, 0);
+	TERM medium := (0, 0) (0.5, 1) (1, 0);
+	TERM long := (0.5, 0) (1, 1);
+	METHOD: COG;
+	DEFAULT := -1.00;
+END_DEFUZZIFY
+
+DEFUZZIFY decay_time
+	TERM short := (0, 1) (0.5, 0);
+	TERM medium := (0, 0) (0.5, 1) (1, 0);
+	TERM long := (0.5, 0) (1, 1);
+	METHOD: COG;
+	DEFAULT := -1.00;
+END_DEFUZZIFY
 
 RULEBLOCK rules
 	AND : MIN;
@@ -89,6 +122,8 @@ RULEBLOCK rules
 	RULE 6: IF harsh IS high THEN flux_mean IS high;
 	
 	RULE 7: IF harsh IS low THEN flatness_mean IS medium;
+
+	RULE 8: IF plucked IS high THEN sustain_time IS short;
 	
 END_RULEBLOCK
 

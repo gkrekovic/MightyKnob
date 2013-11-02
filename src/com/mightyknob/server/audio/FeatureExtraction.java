@@ -72,7 +72,19 @@ public class FeatureExtraction {
 			if (extractAll || targetVector.flatnessMean >= 0) vector.setFlatnessMean(calcMean(flatness));
 			if (extractAll || targetVector.flatnessStddev >= 0) vector.setFlatnessStddev(calcStdDev(flatness));
 		}
-											
+			
+		
+		// Calculate temporal features
+		if (extractAll || targetVector.attackTime >= 0 || targetVector.sustainTime >= 0  || targetVector.decayTime >= 0) {
+			double[] envelope = new double[signal.length];
+			envelope = amplitudeEnvelope(signal);
+			int attackTime = calculateAttackTime(envelope);
+			int sustainTime = calculateSustainTime(envelope, attackTime);
+			int decayTime = calculateDecayTime(envelope, attackTime+sustainTime);
+			if (extractAll || targetVector.attackTime >= 0) vector.setAttackTime((double) attackTime / signal.length);			
+			if (extractAll || targetVector.sustainTime >= 0) vector.setSustainTime((double) sustainTime / signal.length);			
+			if (extractAll || targetVector.decayTime >= 0) vector.setDecayTime((double) decayTime / signal.length);						
+		}	
 		return vector;
 	}
 
@@ -83,7 +95,7 @@ public class FeatureExtraction {
 		return n+1;
 	}
 
-	/** Calculate the power spectrum which is necessary for calculating spetrcal-based features */
+	/** Calculate the power spectrum which is necessary for calculating spectral-based features */
 	private double[][] powerSpectrum(float signal[], int effectiveLength) {
 		int numberOfBlocks = (effectiveLength-blockSize)/stepSize+1;
 		
@@ -100,7 +112,8 @@ public class FeatureExtraction {
 			}
 			FFTObj.realForward(block);
 			
-			for (int j=0; j<blockSize/2; ++j) {
+			spectrum[counter][0] = block[0] * block[0];
+			for (int j=1; j<blockSize/2; ++j) {
 				spectrum[counter][j] = block[j*2]*block[j*2]+block[j*2+1]*block[j*2+1];
 			}
 			counter++;
@@ -206,9 +219,33 @@ public class FeatureExtraction {
 		}
 		
 		// Transform back to the time domain
-		FFTObjDouble.realInverseFull(smoothed, true);
+		FFTObjDouble.realInverse(smoothed, true);
 		
 		return smoothed;
+	}
+	
+	/** Returns the attack time in number of samples */
+	private int calculateAttackTime(double[] envelope) {
+		for (int i = 0; i < envelope.length; ++i) {
+			if (envelope[i] > 0.99) return i;
+		}
+		return envelope.length;
+	}
+	
+	/** Returns the sustain time in number of samples */
+	private int calculateSustainTime(double[] envelope, int start) {
+		for (int i = start; i < envelope.length; ++i) {
+			if (envelope[i] < 0.7) return i-start;
+		}
+		return envelope.length-start;
+	}
+
+	/** Returns the decay time in number of samples */
+	private int calculateDecayTime(double[] envelope, int start) {
+		for (int i = start; i < envelope.length; ++i) {
+			if (envelope[i] < 0.05) return i-start;
+		}
+		return envelope.length-start;
 	}
 	
 	/** Calculate arithmetic mean */
