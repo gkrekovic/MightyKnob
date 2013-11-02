@@ -54,7 +54,7 @@ public class GeneticAlgorithm {
 		engine.setSingleThreaded(true);
 		engine.addEvolutionObserver(new EvolutionLogger<Patch>());		
 		Patch p = new Patch();
-		p = engine.evolve(populationSize, eliteCount, seedCandidates, new GenerationCount(15));
+		p = engine.evolve(populationSize, eliteCount, seedCandidates, new GenerationCount(3));
 		
 		// Synthesize the best candidate
 		Synth synth = new Synth(vst);

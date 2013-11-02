@@ -120,7 +120,7 @@ public class FeatureExtraction {
 			weightedTotal = 0;
 			for (int j=0; j<blockSize/2; ++j) {
 				total += spectrum[i][j];
-				weightedTotal += (2*sampleRate/blockSize)*j*spectrum[i][j];
+				weightedTotal += (sampleRate/blockSize)*j*spectrum[i][j];
 			}
 			
 			if (total != 0) {

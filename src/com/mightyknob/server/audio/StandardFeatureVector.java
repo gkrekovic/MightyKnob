@@ -14,14 +14,16 @@ public class StandardFeatureVector extends AbstractFeatureVector {
 	@Override
 	public void setCentroidMean(double x) {
 		if (x < 0 || (sampleRate > 0 && x > sampleRate/2))
-			throw new NumberFormatException("Centroid mean out of range. It is expected to be between 0 and sampleRate/2.");
+			throw new NumberFormatException("Centroid mean out of range. It is expected to be between 0 and sampleRate/2."
+					+ "The excpetion occurred, because the value was:" + x);
 		centroidMean = (Double.isNaN(x)) ? -1 : x;
 	}
 
 	@Override
 	public void setCentroidStddev(double x) {
-		if (x < 0 || (sampleRate > 0 && x > sampleRate/2))
-			throw new NumberFormatException("Centroid standard deviation out of range. It is expected to be between 0 and sampleRate/2.");
+		if (x < 0 || (sampleRate > 0 && x > sampleRate))
+			throw new NumberFormatException("Centroid standard deviation out of range. It is expected to be between 0 and sampleRate."
+					+ "The excpetion occurred, because the value was:" + x);
 		centroidStddev = (Double.isNaN(x)) ? -1 : x;
 	}
 
