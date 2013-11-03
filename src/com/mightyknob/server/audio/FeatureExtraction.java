@@ -1,7 +1,6 @@
 package com.mightyknob.server.audio;
 
 import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
-import edu.emory.mathcs.jtransforms.fft.FloatFFT_1D;
 
 /**  
  * @author Gordan Kreković
@@ -81,9 +80,10 @@ public class FeatureExtraction {
 			int attackTime = calculateAttackTime(envelope);
 			int sustainTime = calculateSustainTime(envelope, attackTime);
 			int decayTime = calculateDecayTime(envelope, attackTime+sustainTime);
-			if (extractAll || targetVector.attackTime >= 0) vector.setAttackTime((double) attackTime / signal.length);			
-			if (extractAll || targetVector.sustainTime >= 0) vector.setSustainTime((double) sustainTime / signal.length);			
-			if (extractAll || targetVector.decayTime >= 0) vector.setDecayTime((double) decayTime / signal.length);						
+			double l =  (2*(double) envelope.length/3);
+			if (extractAll || targetVector.attackTime >= 0) vector.setAttackTime(attackTime / l);			
+			if (extractAll || targetVector.sustainTime >= 0) vector.setSustainTime(sustainTime / l);			
+			if (extractAll || targetVector.decayTime >= 0) vector.setDecayTime(decayTime / l);						
 		}	
 		return vector;
 	}
@@ -194,34 +194,34 @@ public class FeatureExtraction {
 	/** Calculate the amplitude envelope by convolving the audio signal with the Gaussian window.
 	 *  Amplitude envelope is necessary for calculating temporal features.
 	 */
-	private double[] amplitudeEnvelope(float signal[]) {
-		int n = signal.length;
+	private double[] amplitudeEnvelope(float s[]) {
+		int n = s.length;
+		double[] signal = new double[n];	
+		for (int i = 0; i < n; ++i) {
+			signal[i] = Math.abs(s[i]);
+		}
 		
 		// Generate the Gaussian window in the time domain
-		double sigma = 0.2; // sigma must be <= 0.5
-		double[] window = new double[n];
-		for (int i = 0; i < n; ++i) {
-			double innerTerm = (i-(n-1)/2)/(sigma*(n-1)/2);
+		int m = 2*blockSize;
+		double[] window = new double[m];
+		double sigma = 0.4; // sigma must be <= 0.5
+		for (int i = 0; i < m; ++i) {
+			double innerTerm = (i-(m-1)/2)/(sigma*(m-1)/2);
 			window[i] = Math.exp(-0.5*innerTerm*innerTerm);
 		}
 		
-		// Transform the window and the audio sginal to the frequency domain
-		DoubleFFT_1D FFTObjDouble = new DoubleFFT_1D(n);	
-		FFTObjDouble.realForward(window);
-		FloatFFT_1D FFTObjFloat = new FloatFFT_1D(n);	
-		FFTObjFloat.realForward(signal);
+		// Convolve
+		Convolution convolution = new Convolution(signal, window);
+		int l = convolution.getFrameSize();
+		double[] result = new double[l];
+		convolution.computeResult(result);	
 		
-		// Multiplication in the frequency domain
-		double[] smoothed = new double[n];
-		for (int i = 0; i < n-1; i+=2) {
-			smoothed[i] = window[i]*signal[i]-window[i+1]*signal[i+1];
-			smoothed[i+1] = window[i]*signal[i+1]-window[i+1]*signal[i];
-		}
+		// Normalize
+		double maxR = 0;
+		for (int i = 0; i < l; ++i) if (result[i] > maxR) maxR = result[i];
+		for (int i = 0; i < l; ++i) result[i] = result[i]/maxR;
 		
-		// Transform back to the time domain
-		FFTObjDouble.realInverse(smoothed, true);
-		
-		return smoothed;
+		return result;
 	}
 	
 	/** Returns the attack time in number of samples */

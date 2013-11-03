@@ -5,10 +5,10 @@ block_size=1024
 
 mutation_probability=0.3
 max_mutation=0.4
-population_size=30
-elite_count=3
+population_size=50
+elite_count=4
 
 fcl_folder=./fcl/
 fcl_name=model.fcl
 
-preset_analyzer=on
+preset_analyzer=off

@@ -123,7 +123,7 @@ RULEBLOCK rules
 	
 	RULE 7: IF harsh IS low THEN flatness_mean IS medium;
 
-	RULE 8: IF plucked IS high THEN sustain_time IS short;
+	RULE 8: IF plucked IS high THEN attack_time IS long;
 	
 END_RULEBLOCK
 

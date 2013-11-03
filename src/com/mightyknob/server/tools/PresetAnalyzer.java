@@ -58,15 +58,7 @@ public class PresetAnalyzer {
 
 			new Synth(vst).preview(preset, "preset" + i +".wav");
 			i++;
-		}
-		
-		double[] features = targetVector.getFeatures();
-		
-		for (double feature : features) {
-			System.out.print(feature + ", ");
-		}
-		System.out.println("target");
-		
+		}		
 	}
 	
 	private double distance(StandardFeatureVector candidateVector, NormalizedFeatureVector targetVector)  {

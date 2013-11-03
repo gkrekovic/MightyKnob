@@ -11,5 +11,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/watchmaker-framework-0.7.1.jar"/>
 	<classpathentry kind="lib" path="lib/jFuzzyLogic_v3.0.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/jmathplot.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
