@@ -57,4 +57,20 @@ public class NormalizedFeatureVector extends AbstractFeatureVector {
 	public void setDecayTime(double x) {
 		decayTime = (Double.isNaN(x)) ? -1 : x;
 	}
+
+	@Override
+	public void setPitchMean(double x) {
+		if ((x != -1) && (x < 0 || x > 1))
+			throw new NumberFormatException("Normalized pitch mean must be between 0 and 1."
+					+ "The excpetion occurred, because the value was:" + x);
+		pitchMean = (Double.isNaN(x)) ? -1 : x;	
+	}
+
+	@Override
+	public void setPitchStddev(double x) {
+		if ((x != -1) && (x < 0 || x > 1))
+			throw new NumberFormatException("Normalized pitch stddev must be between 0 and 1."
+					+ "The excpetion occurred, because the value was:" + x);
+		pitchStddev = (Double.isNaN(x)) ? -1 : x;	
+	}
 }

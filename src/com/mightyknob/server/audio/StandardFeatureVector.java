@@ -63,6 +63,16 @@ public class StandardFeatureVector extends AbstractFeatureVector {
 		decayTime = (Double.isNaN(x)) ? -1 : x;
 	}
 	
+	@Override
+	public void setPitchMean(double x) {
+		pitchMean = (Double.isNaN(x)) ? -1 : x;
+	}
+
+	@Override
+	public void setPitchStddev(double x) {
+		pitchStddev = (Double.isNaN(x)) ? -1 : x;	
+	}
+	
 	public double[] getNormalizedFeatures() {
 		NormalizedFeatureVector normalizedVector = new NormalizedFeatureVector();
 	
@@ -71,9 +81,8 @@ public class StandardFeatureVector extends AbstractFeatureVector {
 		if (centroidMean != -1)
 			normalizedVector.setCentroidMean(Math.log((2*centroidMean/sampleRate)*(Math.exp(k)-1)+1)/k);
 		
-		if (centroidStddev != -1) {
+		if (centroidStddev != -1)
 			normalizedVector.setCentroidStddev(Math.min(1, centroidStddev/centroidMean));
-		}
 			
 		if (fluxMean != -1)
 			normalizedVector.setFluxMean(Math.min(1, fluxMean));
@@ -97,6 +106,12 @@ public class StandardFeatureVector extends AbstractFeatureVector {
 		
 		if (decayTime != -1)
 			normalizedVector.setDecayTime(Math.log(decayTime*(Math.exp(k)-1)+1)/k);
+		
+		if (pitchMean != -1)
+			normalizedVector.setPitchMean(Math.log((2*pitchMean/sampleRate)*(Math.exp(k)-1)+1)/k);
+		
+		if (pitchStddev != -1)
+			normalizedVector.setPitchStddev(Math.min(1, pitchStddev/pitchMean));	
 		
 		return normalizedVector.getFeatures();
 	}

@@ -84,7 +84,15 @@ public class FeatureExtraction {
 			if (extractAll || targetVector.attackTime >= 0) vector.setAttackTime(attackTime / l);			
 			if (extractAll || targetVector.sustainTime >= 0) vector.setSustainTime(sustainTime / l);			
 			if (extractAll || targetVector.decayTime >= 0) vector.setDecayTime(decayTime / l);						
-		}	
+		}
+		
+		// Calculate pitch
+		if (extractAll || targetVector.pitchMean >=0 || targetVector.pitchStddev >=0) {
+			double[] pitch = new double[effectiveNumberOfBlocks];
+			pitch = estimatePitch(signal, effectiveLength);
+			if (extractAll || targetVector.pitchMean >= 0) vector.setPitchMean(calcMean(pitch));
+			if (extractAll || targetVector.pitchStddev >= 0) vector.setPitchStddev(calcStdDev(pitch));
+		}
 		return vector;
 	}
 
@@ -119,6 +127,22 @@ public class FeatureExtraction {
 			counter++;
 		}
 		return spectrum;
+	}
+	
+	/** Estimate the fundamental frequency using the YIN algorithm */
+	private double[] estimatePitch(float signal[], int effectiveLength) {
+		int numberOfBlocks = (effectiveLength-blockSize)/stepSize+1;
+		double[] result = new double[numberOfBlocks];
+		float [] block = new float[blockSize];
+		FastYin yinObj = new FastYin(sampleRate, blockSize);
+
+		for (int i=0; (i + blockSize) <= effectiveLength; i+=stepSize) {
+			for (int j=0; j<blockSize; ++j) {
+				block[j] = signal[i+j];
+			}
+			result[i] = yinObj.getPitch(block);
+		}
+		return result;
 	}
 
 	/** Calculate the spectral centroid for all blocks of an audio signal */
