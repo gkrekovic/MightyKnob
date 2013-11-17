@@ -72,6 +72,16 @@ public class StandardFeatureVector extends AbstractFeatureVector {
 	public void setPitchStddev(double x) {
 		pitchStddev = (Double.isNaN(x)) ? -1 : x;	
 	}
+
+	@Override
+	public void setHarmonicsOddRatio(double x) {
+		harmonicsOddRatio = (Double.isNaN(x)) ? -1 : x;
+	}
+
+	@Override
+	public void setHarmonicsEvenRatio(double x) {
+		harmonicsEvenRatio = (Double.isNaN(x)) ? -1 : x;
+	}
 	
 	public double[] getNormalizedFeatures() {
 		NormalizedFeatureVector normalizedVector = new NormalizedFeatureVector();
@@ -111,7 +121,15 @@ public class StandardFeatureVector extends AbstractFeatureVector {
 			normalizedVector.setPitchMean(Math.log((2*pitchMean/sampleRate)*(Math.exp(k)-1)+1)/k);
 		
 		if (pitchStddev != -1)
-			normalizedVector.setPitchStddev(Math.min(1, pitchStddev/pitchMean));	
+			normalizedVector.setPitchStddev(Math.min(1, pitchStddev/pitchMean));
+		
+		if (harmonicsEvenRatio != -1)
+			normalizedVector.setHarmonicsEvenRatio(harmonicsEvenRatio);
+
+		if (harmonicsOddRatio != -1)
+			normalizedVector.setHarmonicsOddRatio(harmonicsOddRatio);
+		
+
 		
 		return normalizedVector.getFeatures();
 	}

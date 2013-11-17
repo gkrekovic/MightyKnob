@@ -31,20 +31,26 @@ public class ExpertSystem {
 	public NormalizedFeatureVector evaluate() {
 		NormalizedFeatureVector vector = new NormalizedFeatureVector();
 		
-		fis.setVariable("brightness", 0.3);
-		fis.setVariable("harsh", 0.6);
-		fis.setVariable("plucked", 0.9);
+		fis.setVariable("bright", 0.3);
+		fis.setVariable("harsh", 0.4);
+		fis.setVariable("nasal", 0.3);
+		fis.setVariable("compact", 0.2);
+		fis.setVariable("plucked", 0.6);
+		fis.setVariable("percussive", 0.8);
+		fis.setVariable("varying", 0.4);		
 		
 		fis.evaluate();
-		vector.setCentroidMean(fis.getVariable("centroid_mean").getValue());
-		vector.setCentroidStddev(fis.getVariable("centroid_stddev").getValue());
-		vector.setFluxMean(fis.getVariable("flux_mean").getValue());
-		vector.setFluxStddev(fis.getVariable("flux_stddev").getValue());
-		vector.setFlatnessMean(fis.getVariable("flatness_mean").getValue());
-		vector.setFlatnessStddev(fis.getVariable("flatness_stddev").getValue());
-		vector.setAttackTime(fis.getVariable("attack_time").getValue());
-		vector.setSustainTime(fis.getVariable("sustain_time").getValue());
-		vector.setDecayTime(fis.getVariable("decay_time").getValue());		
+		
+		vector.setCentroidMean(fis.getVariable("centroid_mean").getLatestDefuzzifiedValue());
+		vector.setCentroidStddev(fis.getVariable("centroid_stddev").getLatestDefuzzifiedValue());
+		vector.setFluxMean(fis.getVariable("flux_mean").getLatestDefuzzifiedValue());
+		vector.setFluxStddev(fis.getVariable("flux_stddev").getLatestDefuzzifiedValue());
+		vector.setFlatnessMean(fis.getVariable("flatness_mean").getLatestDefuzzifiedValue());
+		vector.setFlatnessStddev(fis.getVariable("flatness_stddev").getLatestDefuzzifiedValue());
+		vector.setAttackTime(fis.getVariable("attack_time").getLatestDefuzzifiedValue());
+		vector.setSustainTime(fis.getVariable("sustain_time").getLatestDefuzzifiedValue());
+		vector.setDecayTime(fis.getVariable("decay_time").getLatestDefuzzifiedValue());		
+		vector.setHarmonicsOddRatio(fis.getVariable("odd_ratio").getLatestDefuzzifiedValue());		
 		
 		System.out.println("Target vector: " + vector.toString());
 		

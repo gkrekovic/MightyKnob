@@ -5,7 +5,7 @@ package com.mightyknob.server.audio;
  * @version 1.0.0
  */
 public abstract class AbstractFeatureVector {
-	final int NUMBER_OF_FEATURES = 11;
+	final int NUMBER_OF_FEATURES = 13;
 
 	double centroidMean = -1;
 	double centroidStddev = -1;
@@ -18,6 +18,8 @@ public abstract class AbstractFeatureVector {
 	double decayTime = -1;
 	double pitchMean = -1;
 	double pitchStddev = -1;
+	double harmonicsOddRatio = -1;
+	double harmonicsEvenRatio = -1;
 	
 	public AbstractFeatureVector() {
 	}
@@ -44,6 +46,10 @@ public abstract class AbstractFeatureVector {
 	
 	public abstract void setPitchStddev(double x);
 	
+	public abstract void setHarmonicsOddRatio(double x);
+	
+	public abstract void setHarmonicsEvenRatio(double x);	
+	
 	public int getSize() {
 		return NUMBER_OF_FEATURES;
 	}
@@ -61,6 +67,8 @@ public abstract class AbstractFeatureVector {
 		features[8] = decayTime;
 		features[9] = pitchMean;
 		features[10] = pitchStddev;
+		features[11] = harmonicsOddRatio;
+		features[12] = harmonicsEvenRatio;
 		return features;
 	}
 	

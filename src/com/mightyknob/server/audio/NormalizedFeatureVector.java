@@ -73,4 +73,14 @@ public class NormalizedFeatureVector extends AbstractFeatureVector {
 					+ "The excpetion occurred, because the value was:" + x);
 		pitchStddev = (Double.isNaN(x)) ? -1 : x;	
 	}
+
+	@Override
+	public void setHarmonicsOddRatio(double x) {
+		harmonicsOddRatio = (Double.isNaN(x)) ? -1 : x;
+	}
+
+	@Override
+	public void setHarmonicsEvenRatio(double x) {
+		harmonicsEvenRatio = (Double.isNaN(x)) ? -1 : x;
+	}
 }

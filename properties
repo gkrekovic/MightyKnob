@@ -5,7 +5,7 @@ block_size=1024
 
 mutation_probability=0.3
 max_mutation=0.4
-population_size=50
+population_size=40
 elite_count=4
 
 fcl_folder=./fcl/

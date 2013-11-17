@@ -11,6 +11,7 @@ public class FeatureExtraction {
 	int stepSize;
 	float sampleRate;
 	boolean extractAll;
+	final int numberOfHarmonics = 10;
 	NormalizedFeatureVector targetVector;
 	
 	public FeatureExtraction(int blockSize, int stepSize, float sampleRate) {
@@ -86,12 +87,20 @@ public class FeatureExtraction {
 			if (extractAll || targetVector.decayTime >= 0) vector.setDecayTime(decayTime / l);						
 		}
 		
-		// Calculate pitch
-		if (extractAll || targetVector.pitchMean >=0 || targetVector.pitchStddev >=0) {
+		// Calculate pitch and harmonic ratios
+		if (extractAll || targetVector.pitchMean >=0 || targetVector.pitchStddev >=0 
+				|| targetVector.harmonicsEvenRatio >= 0 || targetVector.harmonicsOddRatio >= 0) {
 			double[] pitch = new double[effectiveNumberOfBlocks];
 			pitch = estimatePitch(signal, effectiveLength);
 			if (extractAll || targetVector.pitchMean >= 0) vector.setPitchMean(calcMean(pitch));
 			if (extractAll || targetVector.pitchStddev >= 0) vector.setPitchStddev(calcStdDev(pitch));
+			if (targetVector.harmonicsEvenRatio >= 0 || targetVector.harmonicsOddRatio >= 0) {
+				double[] ratios = new double[2]; 
+				ratios = harmonicRatios(harmonics(spectrum, pitch));
+				vector.setHarmonicsEvenRatio(ratios[0]);
+				vector.setHarmonicsOddRatio(ratios[1]);
+				// System.out.println("Odd = " + ratios[1] + " Even = " + ratios[0]);
+			}
 		}
 		return vector;
 	}
@@ -99,7 +108,7 @@ public class FeatureExtraction {
 	/** Determine which is the last non-zero sample in the signal */
 	private int lastIndexBeforeZeros(float signal[]) {
 		int n = signal.length-1;
-		while (signal[n] < 0.08 && n>0) n--;
+		while (signal[n] < 0.02 && n>0) n--;
 		return n+1;
 	}
 
@@ -135,12 +144,13 @@ public class FeatureExtraction {
 		double[] result = new double[numberOfBlocks];
 		float [] block = new float[blockSize];
 		FastYin yinObj = new FastYin(sampleRate, blockSize);
-
+		
+		int k = 0;
 		for (int i=0; (i + blockSize) <= effectiveLength; i+=stepSize) {
 			for (int j=0; j<blockSize; ++j) {
 				block[j] = signal[i+j];
 			}
-			result[i] = yinObj.getPitch(block);
+			result[k++] = yinObj.getPitch(block);
 		}
 		return result;
 	}
@@ -226,16 +236,10 @@ public class FeatureExtraction {
 		}
 		
 		// Generate the Gaussian window in the time domain
-		int m = 2*blockSize;
-		double[] window = new double[m];
-		double sigma = 0.4; // sigma must be <= 0.5
-		for (int i = 0; i < m; ++i) {
-			double innerTerm = (i-(m-1)/2)/(sigma*(m-1)/2);
-			window[i] = Math.exp(-0.5*innerTerm*innerTerm);
-		}
+		GaussianWindow window = new GaussianWindow(2*blockSize, 0.4);
 		
 		// Convolve
-		Convolution convolution = new Convolution(signal, window);
+		Convolution convolution = new Convolution(signal, window.window);
 		int l = convolution.getFrameSize();
 		double[] result = new double[l];
 		convolution.computeResult(result);	
@@ -270,6 +274,94 @@ public class FeatureExtraction {
 			if (envelope[i] < 0.05) return i-start;
 		}
 		return envelope.length-start;
+	}
+	
+	/** Returns the amplitudes of harmonics */
+	private double[][] harmonics(double[][] spectrum, double[] pitch) {
+		// GaussianWindow window = new GaussianWindow(20, 0.4);
+		double[][] harmonics = new double[pitch.length][numberOfHarmonics];
+		for (int i = 0; i < pitch.length; ++i) {
+			for (int j = 0; j < numberOfHarmonics; ++j) {
+				if (pitch[i] < 0) {
+					harmonics[i][j] = -1;
+				} else {
+					int f = (int) Math.round((pitch[i]*(j+1)*blockSize/(2*sampleRate)));
+					/* System.out.println("f = " + f + " pitch = " + pitch[i] + " bsize = " + blockSize);
+					if (f+10 < blockSize/2) {
+						double sum = 0;
+						for (int k = 0; k < 20; ++k)
+							sum += spectrum[i][f+k-10] * window.window[k];
+						harmonics[i][j] = sum;
+					} else {
+						harmonics[i][j] = 0;
+					} */
+					if (f < blockSize/2) harmonics[i][j] = spectrum[i][f];
+					else harmonics[i][j] = 0;
+				}
+			}
+		}
+		return harmonics;
+	}
+	
+	/** Returns the even and odd harmonic ratios */
+	private double[] harmonicRatios(double[][] harmonics) {
+		double oddHarmonics = 0;
+		double evenHarmonics = 0;
+
+		double evenRatio = 0;
+		double oddRatio = 0;
+		int pitchedBlocks = 0;
+		
+		for (int i = 0; i < harmonics.length; ++i) {
+			if (harmonics[i][0] >= 0) {
+				oddHarmonics = 0;
+				evenHarmonics = 0;
+				for (int j = 0; j < numberOfHarmonics; ++j) {
+					if (j % 2 == 1) oddHarmonics += harmonics[i][j];
+					else evenHarmonics += harmonics[i][j];
+				}
+				oddRatio += oddHarmonics/(evenHarmonics+oddHarmonics);
+				evenRatio += evenHarmonics/(evenHarmonics+oddHarmonics);
+				pitchedBlocks++;
+			}
+		}
+		
+		double[] result = new double[2];
+		result[0] = evenRatio/pitchedBlocks;
+		result[1] = oddRatio/pitchedBlocks;
+		
+		return result;
+	}	
+	
+	
+	/** Calculate tristimulus 1, 2 and 3 */
+	@SuppressWarnings("unused")
+	private double[] tristimulus(double[][] harmonics) {
+		double tristimulus1 = 0;
+		double tristimulus2 = 0;
+		double tristimulus3 = 0;
+		int pitchedBlocks = 0;
+		
+		for (int i = 0; i < harmonics.length; ++i) {
+			if (harmonics[i][0] >= 0) {
+				double sum = 0;
+				double temp = 0;
+				for (int j = 0; j < numberOfHarmonics; ++j) {
+					sum += harmonics[i][j];
+					if (j > 3) temp += harmonics[i][j];
+				}
+				tristimulus1 += harmonics[i][0] / sum;
+				tristimulus2 += (harmonics[i][1] + harmonics[i][2] + harmonics[i][3]) / sum;
+				tristimulus3 += temp / sum;
+				pitchedBlocks++;
+			}
+		}
+		double[] result = new double[3];
+		result[0] = tristimulus1/pitchedBlocks;
+		result[1] = tristimulus2/pitchedBlocks;
+		result[2] = tristimulus3/pitchedBlocks;
+		
+		return result;
 	}
 	
 	/** Calculate arithmetic mean */
