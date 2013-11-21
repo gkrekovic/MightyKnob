@@ -55,22 +55,25 @@ public class FeatureExtraction {
 		// Calculate spectral centroid and its statistical features
 		if (extractAll || targetVector.centroidMean >= 0 || targetVector.centroidStddev >= 0) {
 			centroid = spectralCentroid(spectrum);
-			if (extractAll || targetVector.centroidMean >= 0) vector.setCentroidMean(calcMean(centroid));
-			if (extractAll || targetVector.centroidStddev >= 0) vector.setCentroidStddev(calcStdDev(centroid));
+			double centroidMean = calcMean(centroid);
+			if (extractAll || targetVector.centroidMean >= 0) vector.setCentroidMean(centroidMean);
+			if (extractAll || targetVector.centroidStddev >= 0) vector.setCentroidStddev(calcStdDev(centroid)/centroidMean);
 		}
 
 		// Calculate spectral flux and its statistical features
 		if (extractAll || targetVector.fluxMean >= 0 || targetVector.fluxStddev >= 0) {
 			flux = spectralFlux(spectrum);
-			if (extractAll || targetVector.fluxMean >= 0)	vector.setFluxMean(calcMean(flux));
-			if (extractAll || targetVector.fluxStddev >= 0) vector.setFluxStddev(calcStdDev(flux));
+			double fluxMean = calcMean(flux);
+			if (extractAll || targetVector.fluxMean >= 0)	vector.setFluxMean(fluxMean);
+			if (extractAll || targetVector.fluxStddev >= 0) vector.setFluxStddev(calcStdDev(flux)/fluxMean);
 		}
 
-		// Calculate spectral flatness and ist statistical features	
+		// Calculate spectral flatness and its statistical features	
 		if (extractAll || targetVector.fluxMean >= 0 || targetVector.fluxStddev >= 0) {
 			flatness = spectralFlatness(spectrum);
-			if (extractAll || targetVector.flatnessMean >= 0) vector.setFlatnessMean(calcMean(flatness));
-			if (extractAll || targetVector.flatnessStddev >= 0) vector.setFlatnessStddev(calcStdDev(flatness));
+			double flatnessMean = calcMean(flatness);
+			if (extractAll || targetVector.flatnessMean >= 0) vector.setFlatnessMean(flatnessMean);
+			if (extractAll || targetVector.flatnessStddev >= 0) vector.setFlatnessStddev(calcStdDev(flatness)/flatnessMean);
 		}
 			
 		

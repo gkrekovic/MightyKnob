@@ -31,13 +31,13 @@ public class ExpertSystem {
 	public NormalizedFeatureVector evaluate() {
 		NormalizedFeatureVector vector = new NormalizedFeatureVector();
 		
-		fis.setVariable("bright", 0.3);
-		fis.setVariable("harsh", 0.4);
-		fis.setVariable("nasal", 0.3);
-		fis.setVariable("compact", 0.2);
-		fis.setVariable("plucked", 0.6);
-		fis.setVariable("percussive", 0.8);
-		fis.setVariable("varying", 0.4);		
+		fis.setVariable("bright", -1.0);
+		fis.setVariable("harsh", 0.8);
+		fis.setVariable("nasal", 0.6);
+		fis.setVariable("compact", -1.0);
+		fis.setVariable("plucked", -1.0);
+		fis.setVariable("percussive", -1.0);
+		fis.setVariable("varying", 0.1);		
 		
 		fis.evaluate();
 		

@@ -92,20 +92,20 @@ public class StandardFeatureVector extends AbstractFeatureVector {
 			normalizedVector.setCentroidMean(Math.log((2*centroidMean/sampleRate)*(Math.exp(k)-1)+1)/k);
 		
 		if (centroidStddev != -1)
-			normalizedVector.setCentroidStddev(Math.min(1, centroidStddev/centroidMean));
+			normalizedVector.setCentroidStddev(Math.min(1, centroidStddev));
 			
 		if (fluxMean != -1)
 			normalizedVector.setFluxMean(Math.min(1, fluxMean));
 		
 		if (fluxStddev != -1)
-			normalizedVector.setFluxStddev(Math.min(1, fluxStddev/fluxMean));
+			normalizedVector.setFluxStddev(Math.min(1, fluxStddev));
 		
 		k = 7;
 		if (flatnessMean != -1)
 			normalizedVector.setFlatnessMean(Math.log(flatnessMean*(Math.exp(k)-1)+1)/k);
 		
 		if (flatnessStddev != -1)
-			normalizedVector.setFlatnessStddev(Math.min(1, flatnessStddev/flatnessMean));	
+			normalizedVector.setFlatnessStddev(Math.min(1, flatnessStddev));	
 		
 		k = 5;
 		if (attackTime != -1)

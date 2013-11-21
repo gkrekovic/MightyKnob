@@ -24,7 +24,7 @@ VAR_OUTPUT
 END_VAR
 
 FUZZIFY bright
-	TERM very_low := (0, 1) (0.2, 0);
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
 	TERM low := (0, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -32,7 +32,7 @@ FUZZIFY bright
 END_FUZZIFY
 
 FUZZIFY harsh
-	TERM very_low := (0, 1) (0.2, 0);
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
 	TERM low := (0, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -40,7 +40,7 @@ FUZZIFY harsh
 END_FUZZIFY
 
 FUZZIFY nasal
-	TERM very_low := (0, 1) (0.2, 0);
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
 	TERM low := (0, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -48,7 +48,7 @@ FUZZIFY nasal
 END_FUZZIFY
 
 FUZZIFY compact
-	TERM very_low := (0, 1) (0.2, 0);
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
 	TERM low := (0, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -56,7 +56,7 @@ FUZZIFY compact
 END_FUZZIFY
 
 FUZZIFY plucked
-	TERM very_low := (0, 1) (0.2, 0);
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
 	TERM low := (0, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -64,7 +64,7 @@ FUZZIFY plucked
 END_FUZZIFY
 
 FUZZIFY percussive
-	TERM very_low := (0, 1) (0.2, 0);
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
 	TERM low := (0, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -72,7 +72,7 @@ FUZZIFY percussive
 END_FUZZIFY
 
 FUZZIFY varying
-	TERM very_low := (0, 1) (0.2, 0);
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
 	TERM low := (0, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -80,7 +80,7 @@ FUZZIFY varying
 END_FUZZIFY
 
 DEFUZZIFY centroid_mean
-	TERM very_low := (0, 1) (0.2, 0);
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
 	TERM low := (0, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -90,7 +90,7 @@ DEFUZZIFY centroid_mean
 END_DEFUZZIFY
 
 DEFUZZIFY centroid_stddev
-	TERM very_low := (0, 1) (0.2, 0);
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
 	TERM low := (0, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -100,7 +100,7 @@ DEFUZZIFY centroid_stddev
 END_DEFUZZIFY
 
 DEFUZZIFY flux_mean
-	TERM very_low := (0, 1) (0.2, 0);
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
 	TERM low := (0, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -110,7 +110,7 @@ DEFUZZIFY flux_mean
 END_DEFUZZIFY
 
 DEFUZZIFY flux_stddev
-	TERM very_low := (0, 1) (0.2, 0);
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
 	TERM low := (0, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -120,7 +120,7 @@ DEFUZZIFY flux_stddev
 END_DEFUZZIFY
 
 DEFUZZIFY flatness_mean
-	TERM very_low := (0, 1) (0.2, 0);
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
 	TERM low := (0, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -130,7 +130,7 @@ DEFUZZIFY flatness_mean
 END_DEFUZZIFY
 
 DEFUZZIFY flatness_stddev
-	TERM very_low := (0, 1) (0.2, 0);
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
 	TERM low := (0, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -140,7 +140,7 @@ DEFUZZIFY flatness_stddev
 END_DEFUZZIFY
 
 DEFUZZIFY attack_time
-	TERM very_low := (0, 1) (0.1, 0);
+	TERM very_low := (0, 0) (0, 1) (0.1, 0);
 	TERM low := (0, 0) (0.1, 1) (0.2, 0);
 	TERM medium := (0.1, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -150,7 +150,7 @@ DEFUZZIFY attack_time
 END_DEFUZZIFY
 
 DEFUZZIFY sustain_time
-	TERM very_low := (0, 1) (0.1, 0);
+	TERM very_low := (0, 0) (0, 1) (0.1, 0);
 	TERM low := (0, 0) (0.1, 1) (0.2, 0);
 	TERM medium := (0.1, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -160,7 +160,7 @@ DEFUZZIFY sustain_time
 END_DEFUZZIFY
 
 DEFUZZIFY decay_time
-	TERM very_low := (0, 1) (0.1, 0);
+	TERM very_low := (0, 0) (0, 1) (0.1, 0);
 	TERM low := (0, 0) (0.1, 1) (0.2, 0);
 	TERM medium := (0.1, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -170,7 +170,7 @@ DEFUZZIFY decay_time
 END_DEFUZZIFY
 
 DEFUZZIFY odd_ratio
-	TERM very_low := (0.4, 0) (0.5, 1) (0.6, 0);
+	TERM very_low := (0, 0) (0.4, 0) (0.5, 1) (0.6, 0);
 	TERM low := (0.5, 0) (0.7, 1) (0.8, 0);
 	TERM medium := (0.8, 0) (0.9, 1) (0.96, 0);
 	TERM high := (0.90, 0) (0.96, 1) (1, 0);
@@ -207,7 +207,7 @@ RULEBLOCK rules
 	RULE 18: IF nasal IS medium THEN odd_ratio IS medium;
 	RULE 19: IF nasal IS high THEN odd_ratio IS high;
 	RULE 20: IF nasal IS very_high THEN odd_ratio IS very_high;
-	
+
 	RULE 21: IF plucked IS very_low THEN sustain_time IS high WITH 0.8;
 	RULE 22: IF plucked IS very_low THEN flatness_mean IS very_low  WITH 0.2;
 	RULE 23: IF plucked IS low THEN sustain_time IS high WITH 0.6;
