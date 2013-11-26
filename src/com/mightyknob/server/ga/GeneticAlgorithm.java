@@ -35,9 +35,10 @@ public class GeneticAlgorithm {
 	 * 
 	 * @param targetVector - target normalized values of audio features
 	 */
-	public void evolvePatch(NormalizedFeatureVector targetVector) {
+	public void evolvePatch(NormalizedFeatureVector targetVector, String soundName) {
+		// TODO Reset VST to have original presets in the initial population
 		PatchFactory factory = new PatchFactory(vst);
-		
+
 		// Prepare seed candidates which will be existing presets in the VST synth
 		Collection<Patch> seedCandidates = new ArrayList<Patch>();
 		seedCandidates = factory.generateSeedCandidates(populationSize);
@@ -58,6 +59,10 @@ public class GeneticAlgorithm {
 		
 		// Synthesize the best candidate
 		Synth synth = new Synth(vst);
-		synth.preview(p);
+		synth.preview(p, soundName);
+	}
+	
+	public void evolvePatch(NormalizedFeatureVector targetVector) {
+		evolvePatch(targetVector, "temp.wav");
 	}
 }

@@ -330,8 +330,13 @@ public class FeatureExtraction {
 		}
 		
 		double[] result = new double[2];
-		result[0] = evenRatio/pitchedBlocks;
-		result[1] = oddRatio/pitchedBlocks;
+		if (pitchedBlocks > 2*harmonics.length/3) {
+			result[0] = evenRatio/pitchedBlocks;
+			result[1] = oddRatio/pitchedBlocks;
+		} else {
+			result[0] = 2;
+			result[1] = 2;
+		}
 		
 		return result;
 	}	

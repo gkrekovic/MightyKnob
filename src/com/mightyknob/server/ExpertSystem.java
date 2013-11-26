@@ -1,6 +1,8 @@
 package com.mightyknob.server;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.mightyknob.server.audio.NormalizedFeatureVector;
 
@@ -28,19 +30,13 @@ public class ExpertSystem {
 	 * 
 	 * @return 	Vector of normalized audio features.
 	 */
-	public NormalizedFeatureVector evaluate() {
-		NormalizedFeatureVector vector = new NormalizedFeatureVector();
-		
-		fis.setVariable("bright", -1.0);
-		fis.setVariable("harsh", 0.8);
-		fis.setVariable("nasal", 0.6);
-		fis.setVariable("compact", -1.0);
-		fis.setVariable("plucked", -1.0);
-		fis.setVariable("percussive", -1.0);
-		fis.setVariable("varying", 0.1);		
-		
+	public NormalizedFeatureVector evaluate(HashMap<String, Double> inputs) {
+		for (Map.Entry<String, Double> entry : inputs.entrySet())
+			fis.setVariable(entry.getKey(), entry.getValue());
+
 		fis.evaluate();
 		
+		NormalizedFeatureVector vector = new NormalizedFeatureVector();
 		vector.setCentroidMean(fis.getVariable("centroid_mean").getLatestDefuzzifiedValue());
 		vector.setCentroidStddev(fis.getVariable("centroid_stddev").getLatestDefuzzifiedValue());
 		vector.setFluxMean(fis.getVariable("flux_mean").getLatestDefuzzifiedValue());

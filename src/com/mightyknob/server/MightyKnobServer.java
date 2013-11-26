@@ -59,23 +59,25 @@ public class MightyKnobServer {
 		String fclFileName = properties.getProperty("fcl_name");
 		ExpertSystem es = new ExpertSystem(fclFolder + fclFileName);
 		
-		try {
-			ga.evolvePatch(es.evaluate());
-		} catch (Exception e) {
-			System.err.println(e);
-		}
+		// Initialize the algorithm
+		ProcessInput algorithm = new ProcessInput(es, ga);
+		
+		// Start the algorithm
+		String inputFileFolder = properties.getProperty("input_file_folder");
+		String inputFileName = properties.getProperty("input_file_name");
+		algorithm.start(inputFileFolder + inputFileName);
 
-		if (properties.getProperty("preset_analyzer", "off").compareToIgnoreCase("on") == 0) {
+	/*	if (properties.getProperty("preset_analyzer", "off").compareToIgnoreCase("on") == 0) {
 			PresetAnalyzer analyzer = new PresetAnalyzer(vst);
 			analyzer.analyzePresets(es.evaluate());
-		}
+		} */
 	}
 	
 	/** 
 	 * Initializes a VST synth using JVstHost2
 	 * <p>
 	 * Parameters are defined in the properties file. In this implementation the audio thread
-	 * is not started, because it uses CPU time unnecessarly.
+	 * is not started, because it uses CPU time unnecessarily.
 	 * */
     private static void initVst(String vstFileName, float sampleRate, int blockSize) {
     	vst = null;
