@@ -1,0 +1,196 @@
+FUNCTION_BLOCK attributesToFeatures
+
+VAR_INPUT
+	bright : REAL;
+	harsh : REAL;
+	nasal : REAL;
+	compact : REAL;
+	plucked : REAL;
+	percussive : REAL;
+	varying : REAL;
+END_VAR
+
+VAR_OUTPUT
+	centroid_mean : REAL;
+	centroid_stddev : REAL;
+	flux_mean : REAL;
+	flux_stddev : REAL;
+	flatness_mean : REAL;
+	flatness_stddev : REAL;
+	attack_time : REAL;
+	sustain_time : REAL;
+	decay_time : REAL;
+	odd_ratio : REAL;
+END_VAR
+
+FUZZIFY bright
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
+	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_high := (0.8, 0) (1, 1);
+END_FUZZIFY
+
+FUZZIFY harsh
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
+	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_high := (0.8, 0) (1, 1);
+END_FUZZIFY
+
+FUZZIFY nasal
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
+	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_high := (0.8, 0) (1, 1);
+END_FUZZIFY
+
+FUZZIFY compact
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
+	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_high := (0.8, 0) (1, 1);
+END_FUZZIFY
+
+FUZZIFY plucked
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
+	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_high := (0.8, 0) (1, 1);
+END_FUZZIFY
+
+FUZZIFY percussive
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
+	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_high := (0.8, 0) (1, 1);
+END_FUZZIFY
+
+FUZZIFY varying
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
+	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_high := (0.8, 0) (1, 1);
+END_FUZZIFY
+
+DEFUZZIFY centroid_mean
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
+	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_high := (0.8, 0) (1, 1);
+	METHOD: COG;
+	DEFAULT := -2.00;
+END_DEFUZZIFY
+
+DEFUZZIFY centroid_stddev
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
+	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_high := (0.8, 0) (1, 1);
+	METHOD: COG;
+	DEFAULT := -2.00;
+END_DEFUZZIFY
+
+DEFUZZIFY flux_mean
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
+	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_high := (0.8, 0) (1, 1);
+	METHOD: COG;
+	DEFAULT := -2.00;
+END_DEFUZZIFY
+
+DEFUZZIFY flux_stddev
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
+	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_high := (0.8, 0) (1, 1);
+	METHOD: COG;
+	DEFAULT := -1.00;
+END_DEFUZZIFY
+
+DEFUZZIFY flatness_mean
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
+	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_high := (0.8, 0) (1, 1);
+	METHOD: COG;
+	DEFAULT := -1.00;
+END_DEFUZZIFY
+
+DEFUZZIFY flatness_stddev
+	TERM very_low := (0, 0) (0, 1) (0.2, 0);
+	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_high := (0.8, 0) (1, 1);
+	METHOD: COG;
+	DEFAULT := -1.00;
+END_DEFUZZIFY
+
+DEFUZZIFY attack_time
+	TERM very_low := (0, 0) (0, 1) (0.1, 0);
+	TERM low := (0, 0) (0.1, 1) (0.2, 0);
+	TERM medium := (0.1, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_high := (0.8, 0) (1, 1);
+	METHOD: COG;
+	DEFAULT := -1.00;
+END_DEFUZZIFY
+
+DEFUZZIFY sustain_time
+	TERM very_low := (0, 0) (0, 1) (0.1, 0);
+	TERM low := (0, 0) (0.1, 1) (0.2, 0);
+	TERM medium := (0.1, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_high := (0.8, 0) (1, 1);
+	METHOD: COG;
+	DEFAULT := -1.00;
+END_DEFUZZIFY
+
+DEFUZZIFY decay_time
+	TERM very_low := (0, 0) (0, 1) (0.1, 0);
+	TERM low := (0, 0) (0.1, 1) (0.2, 0);
+	TERM medium := (0.1, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_high := (0.8, 0) (1, 1);
+	METHOD: COG;
+	DEFAULT := -1.00;
+END_DEFUZZIFY
+
+DEFUZZIFY odd_ratio
+	TERM very_low := (0, 0) (0.4, 0) (0.5, 1) (0.6, 0);
+	TERM low := (0.5, 0) (0.7, 1) (0.8, 0);
+	TERM medium := (0.8, 0) (0.9, 1) (0.96, 0);
+	TERM high := (0.90, 0) (0.96, 1) (1, 0);
+	TERM very_high := (0.96, 0) (1, 1);
+	METHOD: COG;
+	DEFAULT := -1.00;
+END_DEFUZZIFY
+
+RULEBLOCK rules
+	AND : MIN;
+	ACCU : MAX;
+	ACT : MIN;
+	
+
+	RULE 1: IF compact IS very_low THEN flatness_mean IS very_high;
+	RULE 2: IF compact IS low THEN flatness_mean IS high;
+ 	RULE 3: IF compact IS medium THEN flatness_mean IS medium;
+	RULE 4: IF compact IS high THEN flatness_mean IS low;
+	RULE 5: IF compact IS very_high THEN flatness_mean IS very_low;
+
+END_RULEBLOCK
+
+END_FUNCTION_BLOCK

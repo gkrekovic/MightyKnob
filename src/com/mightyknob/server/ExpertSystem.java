@@ -31,8 +31,10 @@ public class ExpertSystem {
 	 * @return 	Vector of normalized audio features.
 	 */
 	public NormalizedFeatureVector evaluate(HashMap<String, Double> inputs) {
-		for (Map.Entry<String, Double> entry : inputs.entrySet())
+		for (Map.Entry<String, Double> entry : inputs.entrySet()) {
 			fis.setVariable(entry.getKey(), entry.getValue());
+			//System.out.println("Key: " + entry.getKey() + " Value: " + entry.getValue());
+		}
 
 		fis.evaluate();
 		
@@ -40,7 +42,7 @@ public class ExpertSystem {
 		vector.setCentroidMean(fis.getVariable("centroid_mean").getLatestDefuzzifiedValue());
 		vector.setCentroidStddev(fis.getVariable("centroid_stddev").getLatestDefuzzifiedValue());
 		vector.setFluxMean(fis.getVariable("flux_mean").getLatestDefuzzifiedValue());
-		vector.setFluxStddev(fis.getVariable("flux_stddev").getLatestDefuzzifiedValue());
+		//vector.setFluxStddev(fis.getVariable("flux_stddev").getLatestDefuzzifiedValue());
 		vector.setFlatnessMean(fis.getVariable("flatness_mean").getLatestDefuzzifiedValue());
 		vector.setFlatnessStddev(fis.getVariable("flatness_stddev").getLatestDefuzzifiedValue());
 		vector.setAttackTime(fis.getVariable("attack_time").getLatestDefuzzifiedValue());

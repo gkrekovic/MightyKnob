@@ -14,7 +14,6 @@ VAR_OUTPUT
 	centroid_mean : REAL;
 	centroid_stddev : REAL;
 	flux_mean : REAL;
-	flux_stddev : REAL;
 	flatness_mean : REAL;
 	flatness_stddev : REAL;
 	attack_time : REAL;
@@ -24,123 +23,113 @@ VAR_OUTPUT
 END_VAR
 
 FUZZIFY bright
-	TERM very_low := (0, 0) (0, 1) (0.2, 0);
-	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM very_low := (-0.1, 0) (0, 1) (0.2, 0);
+	TERM low := (0.05, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
-	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM high := (0.5, 0) (0.8, 1) (0.95, 0);
 	TERM very_high := (0.8, 0) (1, 1);
 END_FUZZIFY
 
 FUZZIFY harsh
-	TERM very_low := (0, 0) (0, 1) (0.2, 0);
-	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM very_low := (-0.1, 0) (0, 1) (0.2, 0);
+	TERM low := (0.1, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
-	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM high := (0.5, 0) (0.8, 1) (0.95, 0);
 	TERM very_high := (0.8, 0) (1, 1);
 END_FUZZIFY
 
 FUZZIFY nasal
-	TERM very_low := (0, 0) (0, 1) (0.2, 0);
-	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM very_low := (-0.1, 0) (0, 1) (0.2, 0);
+	TERM low := (0.05, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
 	TERM very_high := (0.8, 0) (1, 1);
 END_FUZZIFY
 
 FUZZIFY compact
-	TERM very_low := (0, 0) (0, 1) (0.2, 0);
-	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM very_low := (-0.1, 0) (0, 1) (0.2, 0);
+	TERM low := (0.05, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
-	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM high := (0.5, 0) (0.8, 1) (0.95, 0);
 	TERM very_high := (0.8, 0) (1, 1);
 END_FUZZIFY
 
 FUZZIFY plucked
-	TERM very_low := (0, 0) (0, 1) (0.2, 0);
-	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM very_low := (-0.1, 0) (0, 1) (0.2, 0);
+	TERM low := (0.1, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
-	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM high := (0.5, 0) (0.8, 1) (0.95, 0);
 	TERM very_high := (0.8, 0) (1, 1);
 END_FUZZIFY
 
 FUZZIFY percussive
-	TERM very_low := (0, 0) (0, 1) (0.2, 0);
-	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM very_low := (-0.1, 0) (0, 1) (0.2, 0);
+	TERM low := (0.05, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
-	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM high := (0.5, 0) (0.8, 1) (0.95, 0);
 	TERM very_high := (0.8, 0) (1, 1);
 END_FUZZIFY
 
 FUZZIFY varying
-	TERM very_low := (0, 0) (0, 1) (0.2, 0);
-	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM very_low := (-0.1, 0) (0, 1) (0.2, 0);
+	TERM low := (0.05, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
-	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM high := (0.5, 0) (0.8, 1) (0.95, 0);
 	TERM very_high := (0.8, 0) (1, 1);
 END_FUZZIFY
 
 DEFUZZIFY centroid_mean
-	TERM very_low := (0, 0) (0, 1) (0.2, 0);
-	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM very_low := (0, 1) (0.2, 0);
+	TERM low := (0.05, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
-	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM high := (0.5, 0) (0.8, 1) (0.95, 0);
 	TERM very_high := (0.8, 0) (1, 1);
 	METHOD: COG;
 	DEFAULT := -1.00;
 END_DEFUZZIFY
 
 DEFUZZIFY centroid_stddev
-	TERM very_low := (0, 0) (0, 1) (0.2, 0);
-	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM very_low := (0, 1) (0.2, 0);
+	TERM low := (0.05, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
-	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM high := (0.5, 0) (0.8, 1) (0.95, 0);
 	TERM very_high := (0.8, 0) (1, 1);
 	METHOD: COG;
 	DEFAULT := -1.00;
 END_DEFUZZIFY
 
 DEFUZZIFY flux_mean
-	TERM very_low := (0, 0) (0, 1) (0.2, 0);
-	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM very_low := (0, 1) (0.2, 0);
+	TERM low := (0.05, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
-	TERM high := (0.5, 0) (0.8, 1) (1, 0);
-	TERM very_high := (0.8, 0) (1, 1);
-	METHOD: COG;
-	DEFAULT := -1.00;
-END_DEFUZZIFY
-
-DEFUZZIFY flux_stddev
-	TERM very_low := (0, 0) (0, 1) (0.2, 0);
-	TERM low := (0, 0) (0.2, 1) (0.5, 0);
-	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
-	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM high := (0.5, 0) (0.8, 1) (0.95, 0);
 	TERM very_high := (0.8, 0) (1, 1);
 	METHOD: COG;
 	DEFAULT := -1.00;
 END_DEFUZZIFY
 
 DEFUZZIFY flatness_mean
-	TERM very_low := (0, 0) (0, 1) (0.2, 0);
-	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM very_low := (0, 1) (0.2, 0);
+	TERM low := (0.05, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
-	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM high := (0.5, 0) (0.8, 1) (0.95, 0);
 	TERM very_high := (0.8, 0) (1, 1);
 	METHOD: COG;
 	DEFAULT := -1.00;
 END_DEFUZZIFY
 
 DEFUZZIFY flatness_stddev
-	TERM very_low := (0, 0) (0, 1) (0.2, 0);
-	TERM low := (0, 0) (0.2, 1) (0.5, 0);
+	TERM very_low := (0, 1) (0.2, 0);
+	TERM low := (0.05, 0) (0.2, 1) (0.5, 0);
 	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
-	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM high := (0.5, 0) (0.8, 1) (0.95, 0);
 	TERM very_high := (0.8, 0) (1, 1);
 	METHOD: COG;
 	DEFAULT := -1.00;
 END_DEFUZZIFY
 
 DEFUZZIFY attack_time
-	TERM very_low := (0, 0) (0, 1) (0.1, 0);
+	TERM very_low := (0, 1) (0.1, 0);
 	TERM low := (0, 0) (0.1, 1) (0.2, 0);
 	TERM medium := (0.1, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -150,7 +139,7 @@ DEFUZZIFY attack_time
 END_DEFUZZIFY
 
 DEFUZZIFY sustain_time
-	TERM very_low := (0, 0) (0, 1) (0.1, 0);
+	TERM very_low := (0, 1) (0.1, 0);
 	TERM low := (0, 0) (0.1, 1) (0.2, 0);
 	TERM medium := (0.1, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -160,7 +149,7 @@ DEFUZZIFY sustain_time
 END_DEFUZZIFY
 
 DEFUZZIFY decay_time
-	TERM very_low := (0, 0) (0, 1) (0.1, 0);
+	TERM very_low := (0, 1) (0.1, 0);
 	TERM low := (0, 0) (0.1, 1) (0.2, 0);
 	TERM medium := (0.1, 0) (0.5, 1) (0.8, 0);
 	TERM high := (0.5, 0) (0.8, 1) (1, 0);
@@ -170,7 +159,7 @@ DEFUZZIFY decay_time
 END_DEFUZZIFY
 
 DEFUZZIFY odd_ratio
-	TERM very_low := (0, 0) (0.4, 0) (0.5, 1) (0.6, 0);
+	TERM very_low := (0.4, 0) (0.5, 1) (0.6, 0);
 	TERM low := (0.5, 0) (0.7, 1) (0.8, 0);
 	TERM medium := (0.8, 0) (0.9, 1) (0.96, 0);
 	TERM high := (0.90, 0) (0.96, 1) (1, 0);
@@ -191,60 +180,62 @@ RULEBLOCK rules
 	RULE 5: IF bright IS very_high THEN centroid_mean IS very_high;
 	
 	RULE 6: IF harsh IS very_low THEN flux_mean IS very_low;
-	RULE 7: IF harsh IS low THEN flux_mean IS low;
- 	RULE 8: IF harsh IS medium THEN flux_mean IS medium;
-	RULE 9: IF harsh IS high THEN flux_mean IS high;
-	RULE 10: IF harsh IS very_high THEN flux_mean IS very_high;
+	RULE 7: IF harsh IS very_low THEN flatness_mean IS very_low WITH 0.7;
+	RULE 8: IF harsh IS low THEN flux_mean IS low;
+	RULE 9: IF harsh IS low THEN flatness_mean IS low WITH 0.5;
+ 	RULE 10: IF harsh IS medium THEN flux_mean IS medium;
+	RULE 11: IF harsh IS high THEN flux_mean IS high;
+	RULE 12: IF harsh IS very_high THEN flux_mean IS very_high;
 
-	RULE 11: IF compact IS very_low THEN flatness_mean IS very_high;
-	RULE 12: IF compact IS low THEN flatness_mean IS high;
- 	RULE 13: IF compact IS medium THEN flatness_mean IS medium;
-	RULE 14: IF compact IS high THEN flatness_mean IS low;
-	RULE 15: IF compact IS very_high THEN flatness_mean IS very_low;
+	RULE 13: IF compact IS very_low THEN flatness_mean IS very_high;
+	RULE 14: IF compact IS low THEN flatness_mean IS high;
+ 	RULE 15: IF compact IS medium THEN flatness_mean IS medium;
+	RULE 16: IF compact IS high THEN flatness_mean IS low;
+	RULE 17: IF compact IS very_high THEN flatness_mean IS very_low;
 
-	RULE 16: IF nasal IS very_low THEN odd_ratio IS very_low;
-	RULE 17: IF nasal IS low THEN odd_ratio IS low;
-	RULE 18: IF nasal IS medium THEN odd_ratio IS medium;
-	RULE 19: IF nasal IS high THEN odd_ratio IS high;
-	RULE 20: IF nasal IS very_high THEN odd_ratio IS very_high;
-
-	RULE 21: IF plucked IS very_low THEN sustain_time IS high WITH 0.8;
-	RULE 22: IF plucked IS very_low THEN flatness_mean IS very_low  WITH 0.2;
-	RULE 23: IF plucked IS low THEN sustain_time IS high WITH 0.6;
-	RULE 24: IF plucked IS medium THEN attack_time IS very_low;
-	RULE 25: IF plucked IS medium THEN sustain_time IS low WITH 0.8;
-	RULE 26: IF plucked IS medium THEN decay_time IS medium;	
-	RULE 27: IF plucked IS high THEN attack_time IS very_low;
-	RULE 28: IF plucked IS high THEN sustain_time IS low;	
-	RULE 29: IF plucked IS high THEN decay_time IS medium;	
-	RULE 30: IF plucked IS very_high THEN attack_time IS very_low;
-	RULE 31: IF plucked IS very_high THEN sustain_time IS very_low;
-	RULE 32: IF plucked IS very_high THEN decay_time IS low;
-	RULE 33: IF plucked IS very_high THEN flux_mean IS high WITH 0.2;
+	RULE 18: IF nasal IS very_low THEN odd_ratio IS very_low;
+	RULE 19: IF nasal IS low THEN odd_ratio IS low;
+	RULE 20: IF nasal IS medium THEN odd_ratio IS medium;
+	RULE 21: IF nasal IS high THEN odd_ratio IS high;
+	RULE 22: IF nasal IS very_high THEN odd_ratio IS very_high;
 	
-	RULE 34: IF percussive IS very_low THEN sustain_time IS high WITH 0.5;
-	RULE 35: IF percussive IS very_low THEN flatness_mean IS very_low  WITH 0.6;
-	RULE 36: IF percussive IS low THEN sustain_time IS high WITH 0.3;
-	RULE 37: IF percussive IS low THEN flatness_mean IS low WITH 0.6;
-	RULE 38: IF percussive IS medium THEN attack_time IS very_low;
-	RULE 39: IF percussive IS medium THEN sustain_time IS low;
-	RULE 40: IF percussive IS medium THEN decay_time IS low;
-	RULE 41: IF percussive IS medium THEN flatness_mean IS high WITH 0.7;
-	RULE 42: IF percussive IS high THEN attack_time IS very_low;
-	RULE 43: IF percussive IS high THEN sustain_time IS very_low;
-	RULE 44: IF percussive IS high THEN decay_time IS very_low;
-	RULE 45: IF percussive IS high THEN flatness_mean IS very_high;
-	RULE 46: IF percussive IS very_high THEN attack_time IS very_low;
-	RULE 47: IF percussive IS very_high THEN sustain_time IS very_low;
-	RULE 48: IF percussive IS very_high THEN decay_time IS very_low;
-	RULE 49: IF percussive IS very_high THEN flatness_mean IS very_high;
+	RULE 23: IF plucked IS very_low THEN sustain_time IS high WITH 0.8;
+	RULE 24: IF plucked IS very_low THEN flatness_mean IS very_low  WITH 0.2;
+	RULE 25: IF plucked IS low THEN sustain_time IS high WITH 0.6;
+	RULE 26: IF plucked IS medium THEN attack_time IS very_low;
+	RULE 27: IF plucked IS medium THEN sustain_time IS low WITH 0.8;
+	RULE 28: IF plucked IS medium THEN decay_time IS medium;	
+	RULE 29: IF plucked IS high THEN attack_time IS very_low;
+	RULE 30: IF plucked IS high THEN sustain_time IS low;	
+	RULE 31: IF plucked IS high THEN decay_time IS medium;	
+	RULE 32: IF plucked IS very_high THEN attack_time IS very_low;
+	RULE 33: IF plucked IS very_high THEN sustain_time IS very_low;
+	RULE 34: IF plucked IS very_high THEN decay_time IS low;
+	RULE 35: IF plucked IS very_high THEN flux_mean IS high WITH 0.2;
 
-	RULE 50: IF varying IS very_low THEN flux_mean IS very_low WITH 0.2;
-	RULE 51: IF varying IS very_low OR varying IS low THEN centroid_stddev IS very_low;
-	RULE 52: IF varying IS very_low OR varying IS low THEN flatness_stddev IS very_low;
-	RULE 53: IF varying IS medium THEN centroid_stddev IS low;
-	RULE 54: IF varying IS high THEN centroid_stddev IS high;
-	RULE 55: IF varying IS very_high THEN centroid_stddev IS very_high;
+	RULE 36: IF percussive IS very_low THEN sustain_time IS high WITH 0.5;
+	RULE 37: IF percussive IS very_low THEN flatness_mean IS very_low  WITH 0.6;
+	RULE 38: IF percussive IS low THEN sustain_time IS high WITH 0.3;
+	RULE 39: IF percussive IS low THEN flatness_mean IS low WITH 0.6;
+	RULE 40: IF percussive IS medium THEN attack_time IS very_low;
+	RULE 41: IF percussive IS medium THEN sustain_time IS low;
+	RULE 42: IF percussive IS medium THEN decay_time IS low;
+	RULE 43: IF percussive IS medium THEN flatness_mean IS high WITH 0.7;
+	RULE 44: IF percussive IS high THEN attack_time IS very_low;
+	RULE 45: IF percussive IS high THEN sustain_time IS very_low;
+	RULE 46: IF percussive IS high THEN decay_time IS very_low;
+	RULE 47: IF percussive IS high THEN flatness_mean IS very_high;
+	RULE 48: IF percussive IS very_high THEN attack_time IS very_low;
+	RULE 49: IF percussive IS very_high THEN sustain_time IS very_low;
+	RULE 50: IF percussive IS very_high THEN decay_time IS very_low;
+	RULE 51: IF percussive IS very_high THEN flatness_mean IS very_high;
+
+	RULE 52: IF varying IS very_low THEN flux_mean IS very_low WITH 0.2;
+	RULE 53: IF varying IS very_low OR varying IS low THEN centroid_stddev IS very_low;
+	RULE 54: IF varying IS very_low OR varying IS low THEN flatness_stddev IS very_low;
+	RULE 55: IF varying IS medium THEN centroid_stddev IS low;
+	RULE 56: IF varying IS high THEN centroid_stddev IS high;
+	RULE 57: IF varying IS very_high THEN centroid_stddev IS very_high;
 	
 END_RULEBLOCK
 

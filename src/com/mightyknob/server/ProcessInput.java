@@ -32,11 +32,12 @@ public class ProcessInput {
 			int j=0;
 			while ((line = br.readLine()) != null) {
 				String[] values = line.split(separator);
-				for (int i=0; i < values.length; ++i) {
+				for (int i=0; i < attributes.length; ++i) {
 					Double value;
 					if (values[i].isEmpty() == true) value = -1.0;
 					else value = Double.parseDouble(values[i]);
 					inputs.put(attributes[i], value);
+					// System.out.println(attributes[i] + ", " + value);
 				}
 				
 				// Start the algorithm
