@@ -17,14 +17,12 @@ import org.uncommons.maths.random.MersenneTwisterRNG;
  * @version 1.0.0
  */
 public class GeneticAlgorithm {
-	private JVstHost2 vst;	
 	private float mutationProbability;
 	private float maxMutation;
 	int populationSize;
 	int eliteCount;
 
-	public GeneticAlgorithm(float mutationProbability, float maxMutation, int populationSize, int eliteCount, JVstHost2 vst) {
-		this.vst = vst;
+	public GeneticAlgorithm(float mutationProbability, float maxMutation, int populationSize, int eliteCount) {
 		this.mutationProbability = mutationProbability;
 		this.maxMutation = maxMutation;
 		this.populationSize = populationSize;
@@ -35,7 +33,7 @@ public class GeneticAlgorithm {
 	 * 
 	 * @param targetVector - target normalized values of audio features
 	 */
-	public void evolvePatch(NormalizedFeatureVector targetVector, String soundName) {
+	public void evolvePatch(NormalizedFeatureVector targetVector, JVstHost2 vst, String soundName) {
 		// TODO Reset VST to have original presets in the initial population
 		PatchFactory factory = new PatchFactory(vst);
 
@@ -62,7 +60,7 @@ public class GeneticAlgorithm {
 		synth.preview(p, soundName);
 	}
 	
-	public void evolvePatch(NormalizedFeatureVector targetVector) {
-		evolvePatch(targetVector, "temp.wav");
+	public void evolvePatch(NormalizedFeatureVector targetVector, JVstHost2 vst) {
+		evolvePatch(targetVector, vst, "temp.wav");
 	}
 }

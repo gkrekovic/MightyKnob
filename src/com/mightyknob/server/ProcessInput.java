@@ -1,6 +1,7 @@
 package com.mightyknob.server;
 
 import com.mightyknob.server.ga.GeneticAlgorithm;
+import com.synthbot.audioplugin.vst.vst2.JVstHost2;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -11,10 +12,12 @@ import java.util.HashMap;
 public class ProcessInput {
 	ExpertSystem es;
 	GeneticAlgorithm ga;
+	JVstHost2 vst;
 	
-	public ProcessInput(ExpertSystem es, GeneticAlgorithm ga) {
+	public ProcessInput(ExpertSystem es, GeneticAlgorithm ga, JVstHost2 vst) {
 		this.es = es;
 		this.ga = ga;
+		this.vst = vst;
 	}
 	
 	public void start(String inputFile) {
@@ -38,8 +41,8 @@ public class ProcessInput {
 				
 				// Start the algorithm
 				try {
-					// TODO Reset VST to have original presets in the initial population
-					ga.evolvePatch(es.evaluate(inputs), String.format("sound%03d.wav", ++j));
+					vst = new VstInitializer().initialize(vst.getPluginPath(), vst.getSampleRate(), vst.getBlockSize());
+					ga.evolvePatch(es.evaluate(inputs), vst, String.format("sound%02d.wav", ++j));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

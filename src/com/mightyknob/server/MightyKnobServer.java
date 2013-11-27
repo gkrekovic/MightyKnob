@@ -45,14 +45,14 @@ public class MightyKnobServer {
 		String vstName = properties.getProperty("vst_name");
 		float sampleRate = Integer.parseInt(properties.getProperty("sample_rate"));
 		int blockSize = Integer.parseInt(properties.getProperty("block_size"));
-		initVst(vstFolder+vstName, sampleRate, blockSize);
+		vst = new VstInitializer().initialize(vstFolder+vstName, sampleRate, blockSize);
 		
 		// Initialize the genetic algorithm
 		float mutationProbability = Float.parseFloat(properties.getProperty("mutation_probability", "0.2"));
 		float maxMutation = Float.parseFloat(properties.getProperty("max_mutation", "0.2"));
 		int populationSize = Integer.parseInt(properties.getProperty("population_size", "30"));
 		int eliteCount = Integer.parseInt(properties.getProperty("elite_count", "5"));
-		GeneticAlgorithm ga = new GeneticAlgorithm(mutationProbability, maxMutation, populationSize, eliteCount, vst);
+		GeneticAlgorithm ga = new GeneticAlgorithm(mutationProbability, maxMutation, populationSize, eliteCount);
 		
 		// Initialize the expert system
 		String fclFolder = properties.getProperty("fcl_folder");
@@ -60,7 +60,7 @@ public class MightyKnobServer {
 		ExpertSystem es = new ExpertSystem(fclFolder + fclFileName);
 		
 		// Initialize the algorithm
-		ProcessInput algorithm = new ProcessInput(es, ga);
+		ProcessInput algorithm = new ProcessInput(es, ga, vst);
 		
 		// Start the algorithm
 		String inputFileFolder = properties.getProperty("input_file_folder");
@@ -73,35 +73,5 @@ public class MightyKnobServer {
 		} */
 	}
 	
-	/** 
-	 * Initializes a VST synth using JVstHost2
-	 * <p>
-	 * Parameters are defined in the properties file. In this implementation the audio thread
-	 * is not started, because it uses CPU time unnecessarily.
-	 * */
-    private static void initVst(String vstFileName, float sampleRate, int blockSize) {
-    	vst = null;
-		File vstFile = new File(vstFileName);
-				
-		try {
-			vst = JVstHost2.newInstance(vstFile, sampleRate, blockSize);
-		} catch (FileNotFoundException fnfe) {
-			fnfe.printStackTrace(System.err);
-		} catch (JVstLoadException jvle) {
-			jvle.printStackTrace(System.err);
-		}
-		
-		// start the audio thread
-	    /* 
-	    JVstAudioThread audioThread;
-	    final String AUDIO_THREAD = "Audio Thread";
-	    audioThread = new JVstAudioThread(vst);
-	    Thread thread = new Thread(audioThread);
-	    thread.setName(AUDIO_THREAD); // for easy debugging
-	    thread.setDaemon(true); // allows the JVM to exit normally
-	    
-	    thread.setPriority(Thread.MAX_PRIORITY);
-	    thread.start(); */
-    }
 
 }
