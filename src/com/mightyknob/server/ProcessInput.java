@@ -37,7 +37,6 @@ public class ProcessInput {
 					if (values[i].isEmpty() == true) value = -1.0;
 					else value = Double.parseDouble(values[i]);
 					inputs.put(attributes[i], value);
-					// System.out.println(attributes[i] + ", " + value);
 				}
 				
 				// Start the algorithm

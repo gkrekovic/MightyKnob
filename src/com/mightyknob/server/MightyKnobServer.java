@@ -1,15 +1,11 @@
 package com.mightyknob.server;
 
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
 import com.mightyknob.server.ga.GeneticAlgorithm;
 import com.mightyknob.server.tools.PresetAnalyzer;
-// import com.synthbot.audioio.vst.JVstAudioThread;
-import com.synthbot.audioplugin.vst.JVstLoadException;
 import com.synthbot.audioplugin.vst.vst2.JVstHost2;
 
 /**  
@@ -67,10 +63,10 @@ public class MightyKnobServer {
 		String inputFileName = properties.getProperty("input_file_name");
 		algorithm.start(inputFileFolder + inputFileName);
 
-	/*	if (properties.getProperty("preset_analyzer", "off").compareToIgnoreCase("on") == 0) {
+		if (properties.getProperty("preset_analyzer", "off").compareToIgnoreCase("on") == 0) {
 			PresetAnalyzer analyzer = new PresetAnalyzer(vst);
-			analyzer.analyzePresets(es.evaluate());
-		} */
+			analyzer.analyzePresets();
+		}
 	}
 	
 

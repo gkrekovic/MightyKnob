@@ -24,7 +24,7 @@ public class PresetAnalyzer {
 		this.vst = vst;
 	}
 	
-	public void analyzePresets(NormalizedFeatureVector targetVector) {
+	public void analyzePresets() {
 		int n = 132300;
 		int m = 88200;
 		int blockSize = vst.getBlockSize();
@@ -45,6 +45,11 @@ public class PresetAnalyzer {
 				System.err.println("Exception: " + e.getMessage());
 			}
 
+			NormalizedFeatureVector targetVector = new NormalizedFeatureVector();
+			// define which features have to be calculated
+			targetVector.setCentroidMean(0);
+			targetVector.setFlatnessMean(0);
+			
 			FeatureExtraction Extractor = new FeatureExtraction(blockSize, stepSize, sampleRate, targetVector);
 			StandardFeatureVector featureVector = Extractor.extractFeatures(signal);
 			double[] normalizedFeatures = featureVector.getNormalizedFeatures();
@@ -53,29 +58,11 @@ public class PresetAnalyzer {
 			for (int j = 0; j < featureVector.getSize(); ++j) {
 				if (features[j] != -1) System.out.print(features[j] + ", " + normalizedFeatures[j] + ", ");
 			}
-			System.out.print("distance: " + distance(featureVector, targetVector));
 			System.out.println("preset" + i);
 
 			new Synth(vst).preview(preset, "preset" + i +".wav");
 			i++;
 		}		
 	}
-	
-	private double distance(StandardFeatureVector candidateVector, NormalizedFeatureVector targetVector)  {
-		int vectorSize = candidateVector.getSize();
-		if (vectorSize != targetVector.getSize()) return MAX_DISTANCE;
-		double d = 0;
-		
-		double[] candidateFeatures = candidateVector.getNormalizedFeatures();
-		double[] targetFeatures = targetVector.getFeatures();
-		for (int i = 0; i < vectorSize; ++i) {
-			d += Math.abs(candidateFeatures[i] - targetFeatures[i]);
-		}
-		
-		if (Double.isNaN(d)) {
-			return MAX_DISTANCE;
-		} else {
-			return d/vectorSize;
-		}
-	}
+
 }
