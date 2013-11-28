@@ -5,13 +5,13 @@ block_size=1024
 
 mutation_probability=0.4
 max_mutation=0.5
-population_size=40
-elite_count=2
+population_size=60
+elite_count=4
 
 fcl_folder=./fcl/
 fcl_name=model.fcl
 
 input_file_folder=./inputs/
-input_file_name=input_empty.csv
+input_file_name=input.csv
 
 preset_analyzer=off

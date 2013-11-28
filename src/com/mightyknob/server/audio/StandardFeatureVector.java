@@ -100,7 +100,7 @@ public class StandardFeatureVector extends AbstractFeatureVector {
 		if (fluxStddev != -1)
 			normalizedVector.setFluxStddev(Math.min(1, fluxStddev));
 		
-		k = 7;
+		k = 7.5;
 		if (flatnessMean != -1)
 			normalizedVector.setFlatnessMean(Math.log(flatnessMean*(Math.exp(k)-1)+1)/k);
 		
@@ -110,13 +110,14 @@ public class StandardFeatureVector extends AbstractFeatureVector {
 		k = 5;
 		if (attackTime != -1)
 			normalizedVector.setAttackTime(Math.log(attackTime*(Math.exp(k)-1)+1)/k);
-		
+
 		if (sustainTime != -1)
 			normalizedVector.setSustainTime(Math.log(sustainTime*(Math.exp(k)-1)+1)/k);
 		
 		if (decayTime != -1)
 			normalizedVector.setDecayTime(Math.log(decayTime*(Math.exp(k)-1)+1)/k);
 		
+		k = 5;
 		if (pitchMean != -1)
 			normalizedVector.setPitchMean(Math.log((2*pitchMean/sampleRate)*(Math.exp(k)-1)+1)/k);
 		

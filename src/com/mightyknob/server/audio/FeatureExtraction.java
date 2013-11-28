@@ -69,7 +69,7 @@ public class FeatureExtraction {
 		}
 
 		// Calculate spectral flatness and its statistical features	
-		if (extractAll || targetVector.fluxMean >= 0 || targetVector.fluxStddev >= 0) {
+		if (extractAll || targetVector.flatnessMean >= 0 || targetVector.flatnessStddev >= 0) {
 			flatness = spectralFlatness(spectrum);
 			double flatnessMean = calcMean(flatness);
 			if (extractAll || targetVector.flatnessMean >= 0) vector.setFlatnessMean(flatnessMean);
@@ -86,7 +86,7 @@ public class FeatureExtraction {
 			int decayTime = calculateDecayTime(envelope, attackTime+sustainTime);
 			double l =  (2*(double) envelope.length/3);
 			if (extractAll || targetVector.attackTime >= 0) vector.setAttackTime(attackTime / l);			
-			if (extractAll || targetVector.sustainTime >= 0) vector.setSustainTime(sustainTime / l);			
+			if (extractAll || targetVector.sustainTime >= 0) vector.setSustainTime(sustainTime / l);
 			if (extractAll || targetVector.decayTime >= 0) vector.setDecayTime(decayTime / l);						
 		}
 		
@@ -102,7 +102,6 @@ public class FeatureExtraction {
 				ratios = harmonicRatios(harmonics(spectrum, pitch));
 				vector.setHarmonicsEvenRatio(ratios[0]);
 				vector.setHarmonicsOddRatio(ratios[1]);
-				// System.out.println("Odd = " + ratios[1] + " Even = " + ratios[0]);
 			}
 		}
 		return vector;

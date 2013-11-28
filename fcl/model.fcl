@@ -111,9 +111,9 @@ END_DEFUZZIFY
 DEFUZZIFY flatness_mean
 	TERM very_low := (0, 1) (0.2, 0);
 	TERM low := (0.05, 0) (0.2, 1) (0.5, 0);
-	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
-	TERM high := (0.5, 0) (0.8, 1) (0.95, 0);
-	TERM very_high := (0.8, 0) (1, 1);
+	TERM medium := (0.2, 0) (0.45, 1) (0.7, 0);
+	TERM high := (0.45, 0) (0.7, 1) (0.95, 0);
+	TERM very_high := (0.7, 0) (1, 1);
 	METHOD: COG;
 	DEFAULT := -1.00;
 END_DEFUZZIFY
@@ -129,30 +129,30 @@ DEFUZZIFY flatness_stddev
 END_DEFUZZIFY
 
 DEFUZZIFY attack_time
-	TERM very_low := (0, 1) (0.1, 0);
-	TERM low := (0, 0) (0.1, 1) (0.2, 0);
-	TERM medium := (0.1, 0) (0.5, 1) (0.8, 0);
-	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_low := (0, 1) (0.2, 0);
+	TERM low := (0.05, 0) (0.2, 1) (0.5, 0);
+	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (0.95, 0);
 	TERM very_high := (0.8, 0) (1, 1);
 	METHOD: COG;
 	DEFAULT := -1.00;
 END_DEFUZZIFY
 
 DEFUZZIFY sustain_time
-	TERM very_low := (0, 1) (0.1, 0);
-	TERM low := (0, 0) (0.1, 1) (0.2, 0);
-	TERM medium := (0.1, 0) (0.5, 1) (0.8, 0);
-	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_low := (0, 1) (0.2, 0);
+	TERM low := (0.05, 0) (0.2, 1) (0.5, 0);
+	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (0.95, 0);
 	TERM very_high := (0.8, 0) (1, 1);
 	METHOD: COG;
 	DEFAULT := -1.00;
 END_DEFUZZIFY
 
 DEFUZZIFY decay_time
-	TERM very_low := (0, 1) (0.1, 0);
-	TERM low := (0, 0) (0.1, 1) (0.2, 0);
-	TERM medium := (0.1, 0) (0.5, 1) (0.8, 0);
-	TERM high := (0.5, 0) (0.8, 1) (1, 0);
+	TERM very_low := (0, 1) (0.2, 0);
+	TERM low := (0.05, 0) (0.2, 1) (0.5, 0);
+	TERM medium := (0.2, 0) (0.5, 1) (0.8, 0);
+	TERM high := (0.5, 0) (0.8, 1) (0.95, 0);
 	TERM very_high := (0.8, 0) (1, 1);
 	METHOD: COG;
 	DEFAULT := -1.00;
@@ -203,8 +203,8 @@ RULEBLOCK rules
 	RULE 24: IF plucked IS very_low THEN flatness_mean IS very_low  WITH 0.2;
 	RULE 25: IF plucked IS low THEN sustain_time IS high WITH 0.6;
 	RULE 26: IF plucked IS medium THEN attack_time IS very_low;
-	RULE 27: IF plucked IS medium THEN sustain_time IS low WITH 0.8;
-	RULE 28: IF plucked IS medium THEN decay_time IS medium;	
+	RULE 27: IF plucked IS medium THEN sustain_time IS medium WITH 0.8;
+	RULE 28: IF plucked IS medium THEN decay_time IS high;	
 	RULE 29: IF plucked IS high THEN attack_time IS very_low;
 	RULE 30: IF plucked IS high THEN sustain_time IS low;	
 	RULE 31: IF plucked IS high THEN decay_time IS medium;	
