@@ -11,7 +11,7 @@ elite_count=2
 fcl_folder=./fcl/
 fcl_name=model.fcl
 
-input_file_folder=./
-input_file_name=input.csv
+input_file_folder=./inputs/
+input_file_name=input_empty.csv
 
 preset_analyzer=off

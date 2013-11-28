@@ -71,7 +71,7 @@ public class PatchEvaluator implements FitnessEvaluator<Patch> {
 		if (Double.isNaN(d)) {
 			return MAX_DISTANCE;
 		} else {
-			return d/k;
+			return (k == 0) ? 0 : (d/k);
 		}
 	}
 	
