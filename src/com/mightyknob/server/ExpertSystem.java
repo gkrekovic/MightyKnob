@@ -50,7 +50,7 @@ public class ExpertSystem {
 		vector.setDecayTime(fis.getVariable("decay_time").getLatestDefuzzifiedValue());		
 		vector.setHarmonicsOddRatio(fis.getVariable("odd_ratio").getLatestDefuzzifiedValue());		
 		
-		System.out.println("Target vector: " + vector.toString());
+		// System.out.println("Target vector: " + vector.toString());
 		
 		return vector;
 	}

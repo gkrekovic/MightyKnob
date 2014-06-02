@@ -21,12 +21,14 @@ public class GeneticAlgorithm {
 	private float maxMutation;
 	int populationSize;
 	int eliteCount;
+	int generationCount;
 
-	public GeneticAlgorithm(float mutationProbability, float maxMutation, int populationSize, int eliteCount) {
+	public GeneticAlgorithm(float mutationProbability, float maxMutation, int populationSize, int eliteCount, int generationCount) {
 		this.mutationProbability = mutationProbability;
 		this.maxMutation = maxMutation;
 		this.populationSize = populationSize;
-		this.eliteCount = eliteCount;		
+		this.eliteCount = eliteCount;
+		this.generationCount = generationCount;
 	}
 	
 	/** Run the genetic algorithm
@@ -51,13 +53,13 @@ public class GeneticAlgorithm {
 		GenerationalEvolutionEngine<Patch> engine = new GenerationalEvolutionEngine<Patch>(factory,
 				pipeline, new PatchEvaluator(vst, targetVector), new RouletteWheelSelection(), new MersenneTwisterRNG());
 		engine.setSingleThreaded(true);
-		engine.addEvolutionObserver(new EvolutionLogger<Patch>());		
+		engine.addEvolutionObserver(new EvolutionLogger<Patch>(generationCount));		
 		Patch p = new Patch();
-		p = engine.evolve(populationSize, eliteCount, seedCandidates, new GenerationCount(12));
+		p = engine.evolve(populationSize, eliteCount, seedCandidates, new GenerationCount(generationCount));
 		
 		// Synthesize the best candidate
-		Synth synth = new Synth(vst);
-		synth.preview(p, soundName);
+		// Synth synth = new Synth(vst);
+		// synth.preview(p, soundName);
 	}
 	
 	public void evolvePatch(NormalizedFeatureVector targetVector, JVstHost2 vst) {

@@ -48,7 +48,8 @@ public class MightyKnobServer {
 		float maxMutation = Float.parseFloat(properties.getProperty("max_mutation", "0.2"));
 		int populationSize = Integer.parseInt(properties.getProperty("population_size", "30"));
 		int eliteCount = Integer.parseInt(properties.getProperty("elite_count", "5"));
-		GeneticAlgorithm ga = new GeneticAlgorithm(mutationProbability, maxMutation, populationSize, eliteCount);
+		int populationCount = Integer.parseInt(properties.getProperty("population_count", "30"));
+		GeneticAlgorithm ga = new GeneticAlgorithm(mutationProbability, maxMutation, populationSize, eliteCount, populationCount);
 		
 		// Initialize the expert system
 		String fclFolder = properties.getProperty("fcl_folder");

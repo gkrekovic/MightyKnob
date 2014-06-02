@@ -5,11 +5,19 @@ import org.uncommons.watchmaker.framework.PopulationData;
 
 public class EvolutionLogger<T> implements EvolutionObserver<T> {
 
+	int generationCount;
+	
+	public EvolutionLogger(int generationCount) {
+		this.generationCount = generationCount;
+	}
+	
 	@Override
 	public void populationUpdate(PopulationData<? extends T> data) {
-		System.out.println("Generation " + data.getGenerationNumber() +
+		if (data.getGenerationNumber()==generationCount-1)
+			System.out.println(data.getBestCandidateFitness());
+		/* System.out.println("Generation " + data.getGenerationNumber() +
 				" -> Best fitness: " + data.getBestCandidateFitness() +
-				", Mean fitness: " + data.getMeanFitness());
+				", Mean fitness: " + data.getMeanFitness()); */
 	}
 	
 }

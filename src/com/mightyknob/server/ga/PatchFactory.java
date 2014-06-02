@@ -41,7 +41,7 @@ public class PatchFactory extends AbstractCandidateFactory<Patch>{
 		int numPrograms = vst.numPrograms();
 		int numParameters = vst.numParameters();
 		int n = Math.min(populationSize, numPrograms);
-		
+		n=0;
 		for (int i = 0; i < n; ++i) {
 			vst.setProgram(i);
 			ArrayList<Float> parameters = new ArrayList<Float>(n);

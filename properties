@@ -1,17 +1,18 @@
-vst_folder=./vst/
-vst_name=mdaDX10.so
+vst_folder=vst/
+vst_name=mda_DX10.dll
 sample_rate=44100
 block_size=1024
 
-mutation_probability=0.4
-max_mutation=0.5
-population_size=60
-elite_count=4
+mutation_probability=0.1
+max_mutation=0.8
+population_size=100
+elite_count=3
+population_count=30
 
-fcl_folder=./fcl/
+fcl_folder=fcl/
 fcl_name=model.fcl
 
-input_file_folder=./inputs/
+input_file_folder=inputs/
 input_file_name=input.csv
 
 preset_analyzer=off
