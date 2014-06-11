@@ -59,39 +59,29 @@ public class PatchCrossover extends AbstractCrossover<Patch> {
             throw new IllegalArgumentException("Cannot perform cross-over with different length parents.");
         }
 		
-		ArrayList<Float> parameters1;
-		ArrayList<Float> parameters2;
+		ArrayList<Float> parameters1 = parent1.getParameters();
+		ArrayList<Float> parameters2 = parent2.getParameters();
 
-		ArrayList<Float> temp1 = new ArrayList<Float>(n);
-		ArrayList<Float> temp2 = new ArrayList<Float>(n);
+		ArrayList<Float> newParameters1 = new ArrayList<Float>(n);
+		ArrayList<Float> newParameters2 = new ArrayList<Float>(n);
 		
-		parameters1 = parent1.getParameters();
-		parameters2 = parent2.getParameters();
-		
-		for (int i = 0; i < numberOfPoints; ++i) {
+		if (numberOfPoints == 1) {
 			int crossoverIndex = 1 + rng.nextInt(n-1);
-			
-			temp1.clear();
-			temp2.clear();
-			
-			for (int j = 0; j < n; ++j) {
-				if (j<crossoverIndex) {
-					temp1.add(parameters2.get(j));
-					temp2.add(parameters1.get(j));
-				} else {
-					temp1.add(parameters1.get(j));
-					temp2.add(parameters2.get(j));
-				}
+			for (int i=0; i<crossoverIndex; ++i) {
+				newParameters1.add(parameters1.get(i));
+				newParameters2.add(parameters2.get(i));				
 			}
-			
-			parameters1 = new ArrayList<Float>(temp1);
-			parameters2 = new ArrayList<Float>(temp2);
-			
+			for (int i=crossoverIndex; i<n; ++i) {
+				newParameters1.add(parameters2.get(i));
+				newParameters2.add(parameters1.get(i));				
+			}			
+		} else {
+			System.out.println("Nesto ne valja");
 		}
 		
 		List<Patch> result = new ArrayList<Patch>(2);
-		result.add(new Patch(parameters1));
-		result.add(new Patch(parameters2));
+		result.add(new Patch(newParameters1));
+		result.add(new Patch(newParameters2));
 				
 		return result;
 	}
