@@ -3,11 +3,11 @@ vst_name=mda_DX10.dll
 sample_rate=44100
 block_size=1024
 
-mutation_probability=0.1
+mutation_probability=0.3
 max_mutation=0.8
-population_size=100
-elite_count=3
-population_count=30
+population_size=50
+elite_count=25
+population_count=50
 
 fcl_folder=fcl/
 fcl_name=model.fcl
