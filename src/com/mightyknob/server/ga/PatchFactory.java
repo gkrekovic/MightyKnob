@@ -52,13 +52,14 @@ public class PatchFactory extends AbstractCandidateFactory<Patch>{
 		}
 		return seedCandidates;
 	}
-
+	
+	
 	/**
 	 * Generates seed candidates which are equal to existing presets in the VST synth.
 	 *
 	 * @return
 	 */
 	public ArrayList<Patch> generateSeedCandidates() {
-		return generateSeedCandidates(vst.numParameters());
+		return generateSeedCandidates(vst.numPrograms());
 	}
 }

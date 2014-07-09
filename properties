@@ -1,10 +1,10 @@
 vst_folder=vst/
-vst_name=mda_DX10.dll
+vst_name=pling4.dll
 sample_rate=44100
 block_size=1024
 
 mutation_probability=0.3
-max_mutation=0.8
+max_mutation=0.6
 population_size=50
 elite_count=25
 population_count=50

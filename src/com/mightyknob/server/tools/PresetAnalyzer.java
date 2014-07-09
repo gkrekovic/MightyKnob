@@ -8,7 +8,6 @@ import com.mightyknob.server.audio.NormalizedFeatureVector;
 import com.mightyknob.server.audio.StandardFeatureVector;
 import com.mightyknob.server.audio.Synth;
 import com.mightyknob.server.ga.Patch;
-import com.mightyknob.server.ga.PatchFactory;
 import com.synthbot.audioplugin.vst.vst2.JVstHost2;
 
 /**  
@@ -24,7 +23,7 @@ public class PresetAnalyzer {
 		this.vst = vst;
 	}
 	
-	public void analyzePresets() {
+	public Collection<NormalizedFeatureVector> extractFeaturesFromPresets() {
 		int n = 132300;
 		int m = 88200;
 		int blockSize = vst.getBlockSize();
@@ -32,11 +31,11 @@ public class PresetAnalyzer {
 		float sampleRate = vst.getSampleRate();
 		float [] signal = new float[n];
 		
-		PatchFactory factory = new PatchFactory(vst);
 		Collection<Patch> seedCandidates = new ArrayList<Patch>();
-		seedCandidates = factory.generateSeedCandidates();
+		seedCandidates = generatePresets();
 		
-		int i=0;
+		Collection<NormalizedFeatureVector> featureVectors = new ArrayList<NormalizedFeatureVector>();
+		
 		for(Patch preset:seedCandidates) {
 			Synth synth = new Synth(vst);
 			try {
@@ -48,21 +47,47 @@ public class PresetAnalyzer {
 			NormalizedFeatureVector targetVector = new NormalizedFeatureVector();
 			// define which features have to be calculated
 			targetVector.setCentroidMean(0);
+			targetVector.setCentroidStddev(0);
 			targetVector.setFlatnessMean(0);
+			targetVector.setFlatnessMean(0);
+			targetVector.setFluxMean(0);
+			targetVector.setAttackTime(0);
+			targetVector.setDecayTime(0);
+			targetVector.setSustainTime(0);
+			targetVector.setHarmonicsOddRatio(0);
 			
 			FeatureExtraction Extractor = new FeatureExtraction(blockSize, stepSize, sampleRate, targetVector);
 			StandardFeatureVector featureVector = Extractor.extractFeatures(signal);
-			double[] normalizedFeatures = featureVector.getNormalizedFeatures();
-			double[] features = featureVector.getFeatures();
 			
-			for (int j = 0; j < featureVector.getSize(); ++j) {
-				if (features[j] != -1) System.out.print(features[j] + ", " + normalizedFeatures[j] + ", ");
-			}
-			System.out.println("preset" + i);
-
-			new Synth(vst).preview(preset, "preset" + i +".wav");
-			i++;
-		}		
+			featureVectors.add(featureVector.getNormalizedFeatureVector());
+		}
+		return featureVectors;
 	}
+	
+	public void analyzePresets() {
+		Collection<NormalizedFeatureVector> featureVectors = extractFeaturesFromPresets();
+		for (NormalizedFeatureVector featureVector : featureVectors) {
+			double[] features = featureVector.getFeatures();
+			for (int j = 0; j < featureVector.getSize(); ++j) {
+				if (features[j] != -1) System.out.print(features[j] + ", ");
+			}
+			System.out.println();
+		}
+	}
+	
+	public ArrayList<Patch> generatePresets() {
+		ArrayList<Patch> seedCandidates = new ArrayList<Patch>();
+		int numPrograms = vst.numPrograms();
+		int numParameters = vst.numParameters();
 
+		for (int i = 0; i < numPrograms; ++i) {
+			vst.setProgram(i);
+			ArrayList<Float> parameters = new ArrayList<Float>(numPrograms);
+			for (int j = 0; j < numParameters; ++j) {
+				parameters.add(vst.getParameter(j));
+			}
+			seedCandidates.add(new Patch(parameters, "preset" + i));
+		}
+		return seedCandidates;
+	}
 }

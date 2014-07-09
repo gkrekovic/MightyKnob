@@ -57,7 +57,8 @@ public class MightyKnobServer {
 		ExpertSystem es = new ExpertSystem(fclFolder + fclFileName);
 		
 		// Initialize the algorithm
-		ProcessInput algorithm = new ProcessInput(es, ga, vst);
+		// ProcessInput algorithm = new ProcessInput(es, ga, vst);
+		GeneticAlgorithmEvaluator algorithm = new GeneticAlgorithmEvaluator(es, ga, vst);
 		
 		// Start the algorithm
 		String inputFileFolder = properties.getProperty("input_file_folder");

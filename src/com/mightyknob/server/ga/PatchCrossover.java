@@ -65,15 +65,17 @@ public class PatchCrossover extends AbstractCrossover<Patch> {
 		ArrayList<Float> newParameters1 = new ArrayList<Float>(n);
 		ArrayList<Float> newParameters2 = new ArrayList<Float>(n);
 		
+		float r = rng.nextFloat();
+		
 		if (numberOfPoints == 1) {
 			int crossoverIndex = 1 + rng.nextInt(n-1);
 			for (int i=0; i<crossoverIndex; ++i) {
-				newParameters1.add(parameters1.get(i));
-				newParameters2.add(parameters2.get(i));				
+				newParameters1.add(r*parameters1.get(i)+(1-r)*parameters2.get(i));
+				newParameters2.add(r*parameters2.get(i)+(1-r)*parameters1.get(i));				
 			}
 			for (int i=crossoverIndex; i<n; ++i) {
-				newParameters1.add(parameters2.get(i));
-				newParameters2.add(parameters1.get(i));				
+				newParameters1.add(r*parameters2.get(i)+(1-r)*parameters1.get(i));
+				newParameters2.add(r*parameters1.get(i)+(1-r)*parameters2.get(i));				
 			}			
 		} else {
 			System.out.println("Nesto ne valja");

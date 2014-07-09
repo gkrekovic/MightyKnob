@@ -83,9 +83,13 @@ public class StandardFeatureVector extends AbstractFeatureVector {
 		harmonicsEvenRatio = (Double.isNaN(x)) ? -1 : x;
 	}
 	
-	public double[] getNormalizedFeatures() {
-		NormalizedFeatureVector normalizedVector = new NormalizedFeatureVector();
+	public double[] getNormalizedFeatures() {		
+		return getNormalizedFeatureVector().getFeatures();
+	}
 	
+	public NormalizedFeatureVector getNormalizedFeatureVector()  {
+		NormalizedFeatureVector normalizedVector = new NormalizedFeatureVector();
+		
 		double k;
 		k = 5;
 		if (centroidMean != -1)
@@ -130,8 +134,6 @@ public class StandardFeatureVector extends AbstractFeatureVector {
 		if (harmonicsOddRatio != -1)
 			normalizedVector.setHarmonicsOddRatio(harmonicsOddRatio);
 		
-
-		
-		return normalizedVector.getFeatures();
+		return normalizedVector;
 	}
 }

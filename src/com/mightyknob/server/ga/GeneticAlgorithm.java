@@ -7,6 +7,10 @@ import com.mightyknob.server.audio.NormalizedFeatureVector;
 import com.mightyknob.server.audio.Synth;
 import com.synthbot.audioplugin.vst.vst2.JVstHost2;
 import org.uncommons.watchmaker.framework.*;
+import org.uncommons.watchmaker.framework.islands.IslandEvolution;
+import org.uncommons.watchmaker.framework.islands.IslandEvolutionObserver;
+import org.uncommons.watchmaker.framework.islands.Migration;
+import org.uncommons.watchmaker.framework.islands.RingMigration;
 import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
 import org.uncommons.watchmaker.framework.selection.RouletteWheelSelection;
 import org.uncommons.watchmaker.framework.termination.GenerationCount;
@@ -51,11 +55,23 @@ public class GeneticAlgorithm {
 		
 		// Prepare and evolve
 		GenerationalEvolutionEngine<Patch> engine = new GenerationalEvolutionEngine<Patch>(factory,
-				pipeline, new PatchEvaluator(vst, targetVector), new RouletteWheelSelection(), new MersenneTwisterRNG());
+			pipeline, new PatchEvaluator(vst, targetVector), new RouletteWheelSelection(), new MersenneTwisterRNG());
 		engine.setSingleThreaded(true);
 		engine.addEvolutionObserver(new EvolutionLogger<Patch>(generationCount));		
 		Patch p = new Patch();
 		p = engine.evolve(populationSize, eliteCount, seedCandidates, new GenerationCount(generationCount));
+
+		/*// Island implementation
+		int islandCount = 5;
+		int epochLength = 5;
+		int migrationCount = eliteCount / populationSize;
+		Migration migration = new RingMigration();
+		IslandEvolution<Patch> engine = new IslandEvolution<Patch>(islandCount, migration, factory, pipeline,
+			new PatchEvaluator(vst, targetVector), new RouletteWheelSelection(), new MersenneTwisterRNG());
+		engine.addEvolutionObserver(new IslandEvolutionLogger<Patch>(generationCount));
+		Patch p = new Patch();
+		p = engine.evolve(populationSize / islandCount, eliteCount / islandCount, epochLength, migrationCount, new GenerationCount(generationCount));
+		*/
 		
 		// Synthesize the best candidate
 		// Synth synth = new Synth(vst);
